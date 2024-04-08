@@ -8,6 +8,7 @@ import SubjectPaper from './pages/QPG/SubjectPaper';
 import CoursePage from './pages/Courses/CoursePage';
 import ManageSubject from './pages/Subject/ManageSubject';
 import LoginPage from './Temp/LoginPage';
+import StudentPage from './pages/Student/StudentPage';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,15 @@ function App() {
             <>
               <PageTitle title="Loreto Dashboard"/>
               <Dashboard />
+            </>
+          }
+        />
+        <Route
+          path="/students"
+          element={
+            <>
+              <PageTitle title="Student" />
+              <StudentPage />
             </>
           }
         />

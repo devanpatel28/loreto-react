@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import Logo from '../../images/logo/Loreto.png';
 import { HiOutlineLogout, HiOutlineViewGrid } from 'react-icons/hi'
-import { FaBook, FaBuilding, FaChevronDown, FaGraduationCap, FaRegListAlt, FaUserAlt } from "react-icons/fa";
+import { FaBook, FaBuilding, FaChevronDown, FaGraduationCap, FaRegListAlt, FaUserAlt ,FaUsers} from "react-icons/fa";
 import { IoMdAdd, IoMdSettings } from "react-icons/io";
 import { CgFileDocument } from "react-icons/cg";
 import { RiListSettingsFill } from "react-icons/ri";
@@ -94,19 +94,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   Dashboard
                 </NavLink>
               </li>
-              {/* <!-- Menu Item Dashboard --> */}
-            </ul>
-          </div>
 
-          <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-              QPG Menu
+              <h3 className="flex flex-row gap-2.5 mt-3 ml-4 text-sm font-semibold text-bodydark2">
+              {/* <RiListSettingsFill size={22} /> */}
+              Manage
             </h3>
-
-            <ul className="mb-6 flex flex-col gap-1.5">
-
-              {/* <!-- Menu Item Course --> */}
-              
+            
               <li>
                 <NavLink
                   to="/courses"
@@ -115,9 +108,70 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     }`}
                 >
                   <FaGraduationCap size={22} />
-                  Course
+                  Courses
                 </NavLink>
               </li>
+
+              <li>
+                <NavLink
+                  to="/students"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
+                    'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                    <FaUserAlt size={18} />
+                  Students
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/students"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
+                    'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                    <FaUsers size={23} />
+                  Teachers
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/students"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
+                    'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                    <FaUsers size={23} />
+                  Holiday
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/students"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
+                    'bg-graydark dark:bg-meta-4'
+                    }`}
+                >
+                    <FaUsers size={23} />
+                  Events
+                </NavLink>
+              </li>
+              
+
+              {/* <!-- Menu Item Dashboard --> */}
+            </ul>
+          </div>
+
+          <div>
+      
+            <ul className="mb-6 flex flex-col gap">
+
+              {/* <!-- Menu Item Course --> */}
+              
+
               
               {/* <!-- Menu Item Course --> */}
 

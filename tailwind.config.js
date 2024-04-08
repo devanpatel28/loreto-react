@@ -27,7 +27,7 @@ module.exports = {
         bodydark2: '#8A99AF',
         primary: '#3C50E0',
         secondary: '#80CAEE',
-        stroke: '#E2E8F0',
+        stroke: '#dcdfe3',
         gray: '#EFF4FB',
         graydark: '#FF3131',
         'gray-2': '#F7F9FC',
