@@ -85,7 +85,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               {/* <!-- Menu Item Dashboard --> */}
               <li>
                 <NavLink
-                  to="/"
+                  to="/dashboard"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:text-white hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
                     }`}
@@ -126,7 +126,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
               <li>
                 <NavLink
-                  to="/students"
+                  to="/teachers"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
                     }`}

@@ -8,6 +8,16 @@ const DropdownUser = () => {
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
+  const [userdata,setUserdata] = useState([]);
+
+  useEffect(() => {
+    const temp = JSON.parse(localStorage.getItem("userdata"));
+   setUserdata(temp);
+    console.log(typeof(temp));
+    
+  }, [])
+
+  const fullname = userdata.full_name;
 
   // close on click outside
   useEffect(() => {
@@ -45,7 +55,7 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-m font-medium text-black dark:text-white">
-            Admin
+            {fullname}
           </span>
         </span>
 

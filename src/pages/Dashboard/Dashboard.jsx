@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CardDataStats from '../../components/CardDataStats';
 import DefaultLayout from '../../layout/DefaultLayout'
 import { Outlet, Link } from "react-router-dom";
 
 const totalStudent = 200
 const Dashboard = () => {
+  const [userdata,setUserdata] = useState([]);
+
+  useEffect(() => {
+    const temp = JSON.parse(localStorage.getItem("userdata"));
+   setUserdata(temp);
+    console.log(temp);
+    
+  }, [])
+  
     return (
         <DefaultLayout>
             <div>Dashboard</div><br />

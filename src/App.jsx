@@ -9,6 +9,7 @@ import CoursePage from './pages/Courses/CoursePage';
 import ManageSubject from './pages/Subject/ManageSubject';
 import LoginPage from './Temp/LoginPage';
 import StudentPage from './pages/Student/StudentPage';
+import TeacherPage from './pages/Teacher/TeacherPage';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -31,8 +32,8 @@ function App() {
           index
           element={
             <>
-              <PageTitle title="Loreto Dashboard"/>
-              <Dashboard />
+              <PageTitle title="LORETO"/>
+              <LoginPage />
             </>
           }
         />
@@ -42,6 +43,24 @@ function App() {
             <>
               <PageTitle title="Student" />
               <StudentPage />
+            </>
+          }
+        />
+         <Route
+          path="/teachers"
+          element={
+            <>
+              <PageTitle title="Student" />
+              <TeacherPage />
+            </>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <PageTitle title="Dashboard" />
+              <Dashboard />
             </>
           }
         />
