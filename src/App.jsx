@@ -10,6 +10,7 @@ import ManageSubject from './pages/Subject/ManageSubject';
 import LoginPage from './Temp/LoginPage';
 import StudentPage from './pages/Student/StudentPage';
 import TeacherPage from './pages/Teacher/TeacherPage';
+import AddTeacher from './pages/Teacher/AddTeacher';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,15 @@ function App() {
             <>
               <PageTitle title="Student" />
               <StudentPage />
+            </>
+          }
+        />
+        <Route
+          path="/add-teacher"
+          element={
+            <>
+              <PageTitle title="Add Teacher"/>
+              <AddTeacher />
             </>
           }
         />

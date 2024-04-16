@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Logo from '../images/logo/Loreto.png';
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { CHECK_LOGIN_API } from '../helper/api';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const SignIn = () => {
   const handleSignIn = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/login/check', {
+      const response = await axios.post(CHECK_LOGIN_API, {
         username,
         password
       });
@@ -66,7 +67,7 @@ const SignIn = () => {
                     <input
                       type="submit"
                       value="Sign In"
-                      className="w-full cursor-pointer rounded-sm border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+                      className="w-full cursor-pointer rounded-sm  bg-black hover:bg-graydark p-4 text-white transition "
                     />
                   </div>
                 </form>
