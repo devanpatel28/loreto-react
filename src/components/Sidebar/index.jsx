@@ -100,18 +100,83 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               Manage
             </h3>
             
-              <li>
-                <NavLink
-                  to="/courses"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
-                    'bg-graydark dark:bg-meta-4'
-                    }`}
-                >
-                  <FaGraduationCap size={22} />
-                  Courses
-                </NavLink>
-              </li>
-
+              
+              <SidebarLinkGroup
+                activeCondition={
+                  pathname === '/manage' || pathname.includes('manage')
+                }
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <NavLink
+                        to="#"
+                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 
+                          ${(pathname === '/manage-cources') &&
+                            'bg-graydark text-white'
+                            }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
+                        }}
+                      >
+                        <div className='flex w-[22px] justify-center'>
+                          <FaBook size={18} />
+                        </div>
+                        Manage Cource
+                        <FaChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 ${open && 'rotate-180'}`} />
+                      </NavLink>
+                      {/* <!-- Dropdown Menu Start --> */}
+                      <div
+                        className={`translate transform overflow-hidden ${!open && 'hidden'
+                          }`}
+                      >
+                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                          <li>
+                            <NavLink
+                              to="/manage/manage-cources"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-graydark ' +
+                                (isActive && '!text-graydark')
+                              }
+                            >
+                              <IoMdSettings size={20} />
+                              Manage Cources
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/manage/manage-cources"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-graydark ' +
+                                (isActive && '!text-graydark')
+                              }
+                            >
+                              <IoMdSettings size={20} />
+                              Manage Levels
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/manage/manage-cources"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-graydark ' +
+                                (isActive && '!text-graydark')
+                              }
+                            >
+                              <IoMdSettings size={22} />
+                              Manage Subject
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                      {/* <!-- Dropdown Menu End --> */}
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
               <li>
                 <NavLink
                   to="/students"

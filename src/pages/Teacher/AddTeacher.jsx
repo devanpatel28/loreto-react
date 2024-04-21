@@ -4,30 +4,32 @@ import Breadcrumb from "../../components/BreadCrumb/BreadCrumb";
 import DefaultLayout from "../../layout/DefaultLayout";
 import axios from "axios";
 import { ADD_LOGIN_API, GET_TEACHER_ID, ADD_TEACHER_API, MAIL_API } from "../../helper/api";
+import Loader from "../../common/Loader";
 
 const AddTeacher = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     password: "",
-    email: "",
     mobileNo: "",
+    userType: "teacher", // Default value set to "teacher"
   });
-
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const { firstName, lastName, email, mobileNo, password } = formData;
+    setLoading(true);
+    const { firstName, lastName, email, mobileNo, password , userType } = formData;
 
     // Generate username
     const username = `${firstName}${lastName}${new Date().getDate()}${new Date().getMonth() + 1}${new Date().getFullYear()}`;
 
-
+    console.log(userType);
     try {
       const loginResponse = await axios.post(ADD_LOGIN_API, {
         username,
         password,
-        type: "admin",
+        email: email,
+        type: userType,
         isActive: true,
       });
 
@@ -42,7 +44,6 @@ const AddTeacher = () => {
   
         const addTeacherResponse = await axios.post(ADD_TEACHER_API, {
           full_name: `${firstName} ${lastName}`,
-          email,
           mobile_number: mobileNo,
           logindatumId: teacherId,
         });
@@ -69,10 +70,13 @@ const AddTeacher = () => {
           password: "",
           email: "",
           mobileNo: "",
+          userType: "teacher", // Reset userType to "teacher"
         });
       }
     } catch (error) {
       console.error("Error adding teacher:", error);
+    }finally {
+      setLoading(false); // Hide loader after operation completes (success or failure)
     }
   };
 
@@ -84,7 +88,8 @@ const AddTeacher = () => {
       <Breadcrumb pageName="Add Teacher" />
       <div className="flex-none mb-4 min-w-100">
         <form onSubmit={handleSubmit}>
-          <div className="p-6.5 w-180">
+        {loading && <Loader />}
+          {!loading && <div className="p-6.5 w-180">
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
                 First Name <span className="text-meta-1">*</span>
@@ -159,11 +164,26 @@ const AddTeacher = () => {
                 className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
             </div>
-
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                User Type <span className="text-meta-1">*</span>
+              </label>
+              <select
+                name="userType"
+                value={formData.userType}
+                onChange={handleChange}
+                className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                required
+              >
+                <option value="admin">Admin</option>
+                <option value="teacher">Teacher</option>
+                <option value="trainee">Trainee</option>
+              </select>
+            </div>
             <button type="submit" className="flex w-full justify-center rounded bg-graydark p-3 font-medium text-gray hover:bg-opacity-90">
               Add Teacher
             </button>
-          </div>
+          </div>}
         </form>
       </div>
     </DefaultLayout>

@@ -7,7 +7,8 @@ import axios from "axios";
 import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdEdit } from "react-icons/md";
-import { GET_TEACHER_API } from "../../helper/api";
+import { GET_TEACHER_API,CHANGE_TYPE_API,CHANGE_USER_STATUS_API } from "../../helper/api";
+import { data } from "autoprefixer";
 
 const TeacherPage = () => {
     const [search, setSearch] = useState('');
@@ -15,6 +16,10 @@ const TeacherPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [Data, setData] = useState([]);
+    const [editTeacherId, setEditTeacherId] = useState(null);
+    const [editUserType, setEditUserType] = useState("");
+    const [editUserStatus, setEditUserStatus] = useState("");
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,6 +38,7 @@ const TeacherPage = () => {
         setItemsPerPage(parseInt(e.target.value, 10));
         setCurrentPage(1);
     };
+
 
     const [order,setOrder] = useState("ASC");
     const [number,setNumber] = useState("ASC");
@@ -67,7 +73,41 @@ const TeacherPage = () => {
         setData(sortedData);
     };
     
+    const editTeacher = (id) => {
+        const teacher = Data.find((teacher) => teacher.login.id === id);
+        if (teacher) {
+          setEditTeacherId(id);
+          setEditUserType(teacher.login.type);
+          setEditUserStatus(teacher.login.isActive);
+        }
+      };
+    
+      const saveChanges = async () => {
+        try {
+        const teacher = Data.find((teacher) => teacher.login.id === editTeacherId);
+          await axios.put(CHANGE_TYPE_API, {
+            id: editTeacherId,
+            type: editUserType,
+          });
+          console.log("editUserStatus",editUserStatus);
+          console.log("teacher.login.isActive",teacher.login.isActive);
 
+          if (editUserStatus!=teacher.login.isActive) {
+            await axios.put(CHANGE_USER_STATUS_API, {
+              id: editTeacherId,
+            });
+          }
+          // Refresh the teacher list after successful update
+          const response = await axios.get(GET_TEACHER_API);
+          setData(response.data.data);
+          setEditTeacherId(null);
+          setEditUserType("");
+          setEditUserStatus("");
+
+        } catch (error) {
+          console.error("Error updating teacher:", error);
+        }
+      };
     
 
     const paginate = (pageNumber) => {
@@ -129,7 +169,7 @@ const TeacherPage = () => {
                             <tr className="bg-gray-2 text-left dark:bg-meta-4">
                                 <th onClick={() => sortingNumbers("id")} className="min-w-10 py-4 px-2 font-medium text-black dark:text-white ">
                                     <span className="flex items-center gap-1">
-                                        No
+                                        ID
                                         {number === 'ASC' ? <FcNumericalSorting21 /> : <FcNumericalSorting12 />}
                                     </span>
                                 </th>
@@ -192,7 +232,7 @@ const TeacherPage = () => {
                                 </td>
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                     <p className="text-black dark:text-white">
-                                        {teacher.userdata.email}
+                                        {teacher.login.email}
                                     </p>
                                 </td>
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -213,9 +253,8 @@ const TeacherPage = () => {
                                 </td>
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                     <div className="flex items-center space-x-3.5">
-
-                                        <button className="hover:text-primary">
-                                            <MdEdit color="#0000FF" />
+                                    <button onClick={() => editTeacher(teacher.login.id)} class="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
+                                        Edit
                                         </button>
                                     </div>
                                 </td>
@@ -258,7 +297,59 @@ const TeacherPage = () => {
                     Next
                 </button>
             </div>
+            {editTeacherId !== null && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+                <div className="bg-white p-5 rounded-md shadow-lg w-80 h-55">
+                <h2 className="text-lg font-bold mb-5">Edit Teacher</h2>
+                <div className="mb-4">
+                    <label htmlFor="userType">User Type : </label>
+                    <select
+                    id="userType"
+                    value={editUserType}
+                    onChange={(e) => setEditUserType(e.target.value)}
+                    className="border rounded-md px-2 py-1"
+                    >
+                    <option value="admin">Admin</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="trainee">Trainee</option>
+                    </select>
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="userStatus">User Status : </label>
+                    <select
+                    id="userStatus"
+                    value={editUserStatus}
+                    onChange={(e) => setEditUserStatus(e.target.value)}
+                    className="border rounded-md px-2 py-1"
+                    >
+                    <option value={true}>Active</option>
+                    <option value={false}>Inactive</option>
+                    </select>
+                </div>
+                <div className="flex justify-end">
+                    <button
+                    onClick={() => {
+                        setEditTeacherId(null);
+                        setEditUserType("");
+                        setEditUserStatus("");
+                    }}
+                    className="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50"
+                    >
+                    Cancel
+                    </button>
+                    <button
+                    onClick={saveChanges}
+                    className="mx-0 ml-5 px-3 py-1 focus:outline-none bg-blue-600 text-white hover:bg-opacity-50"
+                    >
+                    Save Changes
+                    </button>
+                </div>
+                </div>
+            </div>
+)}
+
         </div>
+        
     </DefaultLayout>
 );
 };

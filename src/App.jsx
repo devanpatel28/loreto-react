@@ -48,6 +48,15 @@ function App() {
           }
         />
         <Route
+          path="/manage/manage-cources"
+          element={
+            <>
+              <PageTitle title="Student" />
+              <CoursePage />
+            </>
+          }
+        />
+        <Route
           path="/add-teacher"
           element={
             <>
