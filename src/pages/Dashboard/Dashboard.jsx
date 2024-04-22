@@ -2,25 +2,32 @@ import React, { useEffect, useState } from 'react'
 import CardDataStats from '../../components/CardDataStats';
 import DefaultLayout from '../../layout/DefaultLayout'
 import { Outlet, Link } from "react-router-dom";
+import { GET_STUDENT_COUNT_API } from '../../helper/api';
+import axios from 'axios';
 
-const totalStudent = 200
 const Dashboard = () => {
-  const [userdata,setUserdata] = useState([]);
+  const [data,setData] = useState([]);
+  const [StudentCount, setStudentCount] = useState([]);
 
   useEffect(() => {
-    const temp = JSON.parse(localStorage.getItem("userdata"));
-   setUserdata(temp);
-    console.log(temp);
-    
-  }, [])
-  
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(GET_STUDENT_COUNT_API);
+            setData(response.data.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    fetchData();
+}, []);
     return (
         <DefaultLayout>
             <div>Dashboard</div><br />
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
           
         <Link to="/students">
-          <CardDataStats title="Total Students" total= {totalStudent}>
+          <CardDataStats title="Total Students" total= {data !== null ? data : 'Loading...'}>
           <svg 
             version="1.1" 
             id="Layer_1"

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/BreadCrumb/BreadCrumb";
 import DefaultLayout from "../../layout/DefaultLayout";
 import axios from "axios";
@@ -14,6 +14,7 @@ const AddTeacher = () => {
     mobileNo: "",
     userType: "teacher", // Default value set to "teacher"
   });
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +64,14 @@ const AddTeacher = () => {
         `,
         });
         console.log(emailResponse.data)
-        // Clear form fields after successful submission
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Teacher added successfully!",
+          width: "400px",
+          timer: 1000,
+          confirmButton: false,
+        });
         setFormData({
           firstName: "",
           lastName: "",
@@ -72,8 +80,17 @@ const AddTeacher = () => {
           mobileNo: "",
           userType: "teacher", // Reset userType to "teacher"
         });
+        navigate('/teacher')
       }
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong!",
+        text: "Error to adding teacher",
+        width: "400px",
+        timer: 1000,
+        confirmButton: false,
+      });
       console.error("Error adding teacher:", error);
     }finally {
       setLoading(false); // Hide loader after operation completes (success or failure)

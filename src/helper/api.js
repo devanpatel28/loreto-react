@@ -1,6 +1,6 @@
 const HOST = "http://localhost:";
 const PORT1 = 3000;
-const PORT2 = 3001;
+const PORT2 = 3000;
 
 export const CHECK_LOGIN_API = HOST+PORT1+"/api/login/check";
 export const ADD_LOGIN_API = HOST+PORT1+"/api/login/";
@@ -10,3 +10,17 @@ export const ADD_TEACHER_API = HOST+PORT1+"/api/teacher";
 export const MAIL_API = HOST+PORT1+"/api/mail/send-email";
 export const CHANGE_TYPE_API = HOST+PORT1+"/api/login/changeType";
 export const CHANGE_USER_STATUS_API = HOST+PORT1+"/api/login/change";
+export const GET_COURSE_API = HOST+PORT1+"/api/courses";
+export const GET_HAS_LEVEL_COURSE_API = HOST+PORT1+"/api/courses/getlevelCourses";
+export const ADD_COURSE_API = HOST+PORT1+"/api/courses";
+export const CHANGE_COURSE_API = HOST+PORT1+"/api/courses/update";
+export const GET_STUDENT_COUNT_API = HOST+PORT1+"/api/login/getStudentCount";
+export const ADD_LEVEL_API = HOST+PORT1+"/api/courselevels/";
+export const GET_LEVEL_API = HOST+PORT1+"/api/courselevels/";
+export const CHANGE_LEVEL_API = HOST+PORT1+"/api/courselevels/update";
+export const FIND_COURSE_API = HOST+PORT1+"/api/courses/find";
+export const FIND_COURSELEVELS_API = HOST+PORT1+"/api/courselevels/find";
+export const GET_COURSE_LEVEL_API = HOST+PORT1+"/api/courselevels/getlevels";
+export const ADD_TOPIC_API = HOST+PORT1+"/api/courseconcepts";
+export const GET_TOPIC_API = HOST+PORT1+"/api/courseconcepts";
+export const CHANGE_TOPIC_API = HOST+PORT1+"/api/courseconcepts/update";

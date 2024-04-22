@@ -9,6 +9,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { MdEdit } from "react-icons/md";
 import { GET_TEACHER_API,CHANGE_TYPE_API,CHANGE_USER_STATUS_API } from "../../helper/api";
 import { data } from "autoprefixer";
+import Swal from "sweetalert2";
 
 const TeacherPage = () => {
     const [search, setSearch] = useState('');
@@ -39,39 +40,7 @@ const TeacherPage = () => {
         setCurrentPage(1);
     };
 
-
-    const [order,setOrder] = useState("ASC");
-    const [number,setNumber] = useState("ASC");
-  
-    const sorting = (col) => {
-      if(order === "ASC")
-      {
-        const sorted = [...Data].sort((a,b) => a[col]> b[col] ? 1 : -1);
-        setData(sorted);
-        setOrder("DSC");
-      }
-  
-      if(order === "DSC")
-      {
-        const sorted = [...Data].sort((a,b) => a[col]< b[col] ? 1 : -1);
-        setData(sorted);
-        setOrder("ASC");
-      }
-    }
-  
-    const sortingNumbers = (col) => {
-        console.log("Sorting numbers column:", col);
-        const sortedData = [...Data];
-            if (number === "ASC") {
-                sortedData.sort((a, b) => a[col] > b[col] ? 1 : -1);
-                setNumber("DSC");
-            } else {
-                sortedData.sort((a, b) => a[col] < b[col] ? 1 : -1);
-                setNumber("ASC");
-            }
-        console.log("Sorted data:", sortedData);
-        setData(sortedData);
-    };
+   
     
     const editTeacher = (id) => {
         const teacher = Data.find((teacher) => teacher.login.id === id);
@@ -97,6 +66,15 @@ const TeacherPage = () => {
               id: editTeacherId,
             });
           }
+
+          Swal.fire({
+            icon: "success",
+            text: "Changes saved successfully!",
+            timer: 1000,
+            width: "400px",
+            showConfirmButton: false,
+          });
+
           // Refresh the teacher list after successful update
           const response = await axios.get(GET_TEACHER_API);
           setData(response.data.data);
@@ -109,7 +87,19 @@ const TeacherPage = () => {
         }
       };
     
-
+      const filteredData = Data.filter((teacher) => {
+        if (searchCriteria === 'full_name') {
+            return search === '' ? true : teacher.userdata.full_name.toLowerCase().includes(search.toLowerCase());
+        }
+        if (searchCriteria === 'mobile') {
+            return search === '' ? true : teacher.userdata.mobile_number.toLowerCase().includes(search.toLowerCase());
+        }
+        if (searchCriteria === 'email') {
+            return search === '' ? true : teacher.login.email.toLowerCase().includes(search.toLowerCase());
+        }
+        return search === '' ? true : teacher.userdata.full_name.toLowerCase().includes(search.toLowerCase());
+    });
+    
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -166,17 +156,15 @@ const TeacherPage = () => {
                     <table className="w-full table-auto">
 
                         <thead>
-                            <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                                <th onClick={() => sortingNumbers("id")} className="min-w-10 py-4 px-2 font-medium text-black dark:text-white ">
+                            <tr className="bg-red-50 text-left dark:bg-meta-4">
+                                <th className="min-w-10 py-4 px-2 font-medium text-black dark:text-white ">
                                     <span className="flex items-center gap-1">
                                         ID
-                                        {number === 'ASC' ? <FcNumericalSorting21 /> : <FcNumericalSorting12 />}
                                     </span>
                                 </th>
-                                <th onClick={() => sorting("full_name")} className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white ">
+                                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white ">
                                 <span className="flex items-center gap-1">
                                     Name
-                                    {order === 'ASC' ? <FcAlphabeticalSortingZa /> : <FcAlphabeticalSortingAz />}
                                 </span>
                             </th>
                             <th className="py-4 px-4 font-medium text-black dark:text-white">
@@ -188,10 +176,9 @@ const TeacherPage = () => {
                             <th className="py-4 px-4 font-medium text-black dark:text-white">
                                 Type
                             </th>
-                            <th onClick={() => sortingNumbers("isActive")} className="min-w-10 py-4 font-medium text-black dark:text-white ">
+                            <th className="min-w-10 py-4 px-4 font-medium text-black dark:text-white ">
                                 <span className="flex items-center gap-1">
                                     Status
-                                    {number === 'ASC' ? <FcNumericalSorting21 /> : <FcNumericalSorting12 />}
                                 </span>
                             </th>
                             <th className="py-4 px-4 font-medium text-black dark:text-white">
@@ -200,18 +187,7 @@ const TeacherPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {currentItems.filter((teacher) => {
-                                if (searchCriteria === 'full_name') {
-                                    return search === '' ? teacher : teacher.userdata.full_name.toLowerCase().includes(search.toLowerCase());
-                                }
-                                if (searchCriteria === 'mobile') {
-                                    return search === '' ? teacher : teacher.userdata.mobile_number.toLowerCase().includes(search.toLowerCase());
-                                }
-                                if (searchCriteria === 'email') {
-                                    return search === '' ? teacher : teacher.userdata.email.toLowerCase().includes(search.toLowerCase());
-                                }
-                                return search === '' ? teacher : teacher.userdata.full_name.toLowerCase().includes(search.toLowerCase());
-                            }).map((teacher, key) => (
+                    {filteredData.slice(indexOfFirstItem, indexOfLastItem).map((teacher, key) => (
                             <tr key={key}>
                                 <td className="border-b border-[#eee] py-5 px-4  dark:border-strokedark ">
                                     <h5 className="font-medium text-black dark:text-white">
