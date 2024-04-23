@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/BreadCrumb/BreadCrumb";
 import DefaultLayout from "../../layout/DefaultLayout";
 import axios from "axios";
-import { ADD_LOGIN_API, GET_TEACHER_ID, ADD_TEACHER_API, MAIL_API } from "../../helper/api";
+import { ADD_LOGIN_API, GET_USER_ID, ADD_TEACHER_API, MAIL_API } from "../../helper/api";
 import Loader from "../../common/Loader";
 
 const AddTeacher = () => {
@@ -35,7 +35,7 @@ const AddTeacher = () => {
       });
 
       if (loginResponse.status == 200) {
-        const teacherIdResponse = await axios.post(GET_TEACHER_ID, {
+        const teacherIdResponse = await axios.post(GET_USER_ID, {
             username: username,
         });
 

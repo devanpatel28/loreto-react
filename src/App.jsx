@@ -14,6 +14,8 @@ import TopicsPage from './pages/Topics/TopicsPage';
 import AddCoursePage from './pages/Courses/AddCoursePage';
 import AddLevelPage from './pages/Levels/AddLevelPage';
 import AddTopic from './pages/Topics/AddTopic';
+import AddStudent from './pages/Student/AddStudentPage';
+import StudentPage from './pages/Student/StudentPage';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -32,9 +34,7 @@ function App() {
   ) : (
     <>
       <Routes>
-        <Route
-          index
-          element={
+        <Route index element={
             <>
               <PageTitle title="LORETO" />
               <LoginPage />
@@ -42,108 +42,98 @@ function App() {
           }
         />
       
-        <Route
-          path="/manage/manage-cources"
-          element={
+        <Route path="/manage/manage-cources" element={
             <>
               <PageTitle title="Cource" />
               <CoursePage />
             </>
           }
         />
-        <Route
-          path="/manage/manage-levels"
-          element={
+        <Route path="/manage/manage-levels" element={
             <>
               <PageTitle title="Levels" />
               <LevelsPage />
             </>
           }
         />
-        <Route
-          path="/manage/manage-topics"
-          element={
+        <Route path="/manage/manage-topics" element={
             <>
               <PageTitle title="Topics" />
               <TopicsPage />
             </>
           }
         />
-        <Route
-          path="/add-teacher"
-          element={
+        <Route path="/add-teacher" element={
             <>
               <PageTitle title="Add Teacher" />
               <AddTeacher />
             </>
           }
         />
-        <Route
-          path="/add-cource"
-          element={
+        <Route path="/add-student" element={
+            <>
+              <PageTitle title="Add Student" />
+              <AddStudent />
+            </>
+          }
+        />
+        <Route path="/manage-student" element={
+            <>
+              <PageTitle title="Students" />
+              <StudentPage />
+            </>
+          }
+        />
+        <Route path="/add-cource" element={
             <>
               <PageTitle title="Add Cource" />
               <AddCoursePage />
             </>
           }
         />
-        <Route
-          path="/add-levels"
-          element={
+        <Route path="/add-levels" element={
             <>
               <PageTitle title="Add Level" />
               <AddLevelPage />
             </>
           }
         />
-        <Route
-          path="/add-topics"
-          element={
+        <Route path="/add-topics" element={
             <>
               <PageTitle title="Add Topics" />
               <AddTopic />
             </>
           }
         />
-        <Route
-          path="/teachers"
-          element={
+        <Route path="/teachers" element={
             <>
               <PageTitle title="Student" />
               <TeacherPage />
             </>
           }
         />
-        <Route
-          path="/dashboard"
-          element={
+        <Route path="/dashboard" element={
             <>
               <PageTitle title="Dashboard" />
               <Dashboard />
             </>
           }
         />
-        <Route
-          path="/login"
-          element={
+        <Route path="/login" element={
             <>
               <PageTitle title="Login" />
               <LoginPage />
             </>
           }
         />
-        <Route
-          path="/calendar"
-          element={
+        <Route path="/calendar" element={
             <>
               <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               {/* <Calendar /> */}
             </>
           }
         />
-        <Route
-          path='/qpaper/set-subject-paper'
-          element={
+        <Route path='/qpaper/set-subject-paper' element={
             <>
               <PageTitle title="Set Subject Paper" />
               <SubjectPaper />
@@ -151,9 +141,7 @@ function App() {
           }
         />
 
-        <Route
-          path='/courses'
-          element={
+        <Route path='/courses' element={
             <>
               <PageTitle title="Courses" />
               <CoursePage />
