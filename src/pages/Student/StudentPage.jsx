@@ -7,23 +7,20 @@ import axios from "axios";
 import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdEdit } from "react-icons/md";
-import { CHANGE_COURSE_API, GET_COURSE_API } from "../../helper/api";
-import Swal from "sweetalert2";
+import {FIND_SHIFT_API, GET_STUDENT_API } from "../../helper/api";
+import { underDev } from "../../helper/alert";
+
 
 const StudentPage = () => {
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [data, setData] = useState([]);
-    const [editCourseId, setEditCourceId] = useState(null);
-    const [editCourseName, setEditCourseName] = useState("");
-    const [editTimeDuration, setEditTimeDuration] = useState("");
-    const [editHasLevels, setEditHasLevels] = useState("");
-
+    const [shiftName, setShiftName] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(GET_COURSE_API);
+                const response = await axios.get(GET_STUDENT_API);
                 setData(response.data.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -33,60 +30,38 @@ const StudentPage = () => {
         fetchData();
     }, []);
 
+
+    useEffect(() => {
+        // Fetch course names for each level
+        data.forEach((student) => {
+            fetchShiftName(student.shiftdatumId);
+        });
+    }, [data]);
+
+    const fetchShiftName = async (shiftdatumId) => {
+        try {
+            console.log("Shift ID:", shiftdatumId);
+            const response = await axios.post(FIND_SHIFT_API, {
+                id:shiftdatumId,
+            });
+            console.log("Shift Name:", response.data.data.shiftName);
+            setShiftName(prevState => ({...prevState,[shiftdatumId]: response.data.data.shiftName
+            }));
+        } catch (error) {
+            console.error("Error fetching Shift name:", error);
+        }
+    };
+
+
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value, 10));
         setCurrentPage(1);
     };
 
-    const editCourse = (id) => {
-        const cource = data.find((cource) => cource.id === id);
-        if (cource) {
-            setEditCourceId(id);
-            setEditCourseName(cource.course_name);
-            setEditTimeDuration(cource.timeDuration);
-            setEditHasLevels(cource.has_levels);
-        }
-    };
-    const filteredData = data.filter((cource) => {
-        return search === '' ? cource : cource.course_name.toLowerCase().includes(search.toLowerCase());
+    const filteredData = data.filter((student) => {
+        return search === '' ? student : student.full_name.toLowerCase().includes(search.toLowerCase());
     });
-    const handleSaveChanges = async () => {
-        try {
-            // Make the HTTP request to update the course
-            await axios.put(CHANGE_COURSE_API, {
-                id: editCourseId,
-                course_name: editCourseName,
-                timeDuration: editTimeDuration,
-                has_levels: editHasLevels,
-            });
-
-            Swal.fire({
-                icon: "success",
-                text: "Changes saved successfully!",
-                timer: 1000,
-                width: "400px",
-                showConfirmButton: false,
-            });
-
-            const response = await axios.get(GET_COURSE_API);
-            setData(response.data.data);
-            setEditCourceId(null);
-            setEditCourseName("");
-            setEditTimeDuration("");
-            setEditHasLevels("");
-            
-        } catch (error) {
-            Swal.fire({
-                icon: "error",
-                text: "Course already exists!",
-                timer: 1000,
-                width: "400px",
-                showConfirmButton: false,
-              });
-            console.error("Error updating course:", error);
-            // Handle error
-        }
-    };
+    
 
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -113,7 +88,7 @@ const StudentPage = () => {
                 <form className="flex items-center ml-10">
                     <input
                         type="text"
-                        placeholder="Search Cource"
+                        placeholder="Search Student"
                         className="border w-100 rounded-sm focus:outline-none border-stroke bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -137,19 +112,19 @@ const StudentPage = () => {
                             <tr className="bg-red-50 text-left dark:bg-meta-4">
                                 <th className="min-w-10 py-4 px-2 font-medium text-black dark:text-white ">
                                     <span className="flex items-center gap-1">
-                                        Course ID
+                                    Student ID
                                     </span>
                                 </th>
                                 <th className="min-w-[20px] py-4 px-2 font-medium text-black dark:text-white ">
                                     <span className="flex items-center gap-1">
-                                        Cource Name
+                                    Name
                                     </span>
                                 </th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">
-                                    Time Duration
+                                    Shift
                                 </th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">
-                                    Has Levels
+                                    Mobile Number
                                 </th>
 
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">
@@ -158,37 +133,37 @@ const StudentPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredData.slice(indexOfFirstItem, indexOfLastItem).map((cource, key) => (
+                            {filteredData.slice(indexOfFirstItem, indexOfLastItem).map((student, key) => (
                                 <tr key={key}>
                                     <td className="border-b border-[#eee] py-5 px-5  dark:border-strokedark ">
                                         <h5 className="font-medium text-black dark:text-white">
-                                            {cource.id}
+                                            {student.id}
                                         </h5>
 
                                     </td>
-                                    <td className="border-b border-[#eee] py-5 px-5 dark:border-strokedark">
+                                    <td className="border-b border-[#eee] py-5 px-3 dark:border-strokedark">
                                         <h5 className="font-medium text-black dark:text-white">
-                                            {cource.course_name}
+                                            {student.full_name}
                                         </h5>
 
                                     </td>
 
-                                    <td className="border-b border-[#eee] py-5 px-7 dark:border-strokedark">
+                                    <td className="border-b border-[#eee] py-5 px-5 dark:border-strokedark">
                                         <p className="text-black dark:text-white">
-                                            {cource.timeDuration} Months
+                                            {shiftName[student.shiftdatumId]}
                                         </p>
                                     </td>
 
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <p className="text-black dark:text-white">
-                                            {cource.has_levels == 1 ? 'YES' : 'NO'}
+                                            {student.mobile_number}
                                         </p>
                                     </td>
 
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <div className="flex items-center space-x-3.5">
-                                            <button onClick={() => editCourse(cource.id)} class="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
-                                                Edit
+                                            <button onClick={()=> underDev()} class="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
+                                                VIEW
                                             </button>
                                         </div>
                                     </td>
@@ -232,71 +207,9 @@ const StudentPage = () => {
                 </div>
 
             </div>
-            {editCourseId && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-8 rounded-md shadow-lg w-96">
-                        <h2 className="text-lg font-bold mb-5">Edit Course</h2>
-                        <div className="mb-4">
-                            <label htmlFor="editCourseName" className="block mb-2 font-semibold">Course Name: </label>
-                            <input
-                                type="tet"
-                                id="editCourseName"
-                                value={editCourseName}
-                                onChange={(e) => setEditCourseName(e.target.value)}
-                                className="border rounded-md px-3 py-2 w-full"
-                                placeholder="Enter Course Name"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="hasLevels" className="block mb-2 font-semibold">Has Levels :</label>
-                            <select
-                                id="hasLevels"
-                                value={editHasLevels} // Make sure to use editHasLevels here
-                                onChange={(e) => setEditHasLevels(e.target.value)}
-                                className="border rounded-md px-3 py-2 w-full"
-                            >
-                                <option value={true}>YES</option>
-                                <option value={false}>NO</option>
-                            </select>
-                        </div>
-                        
-                        <div className="mb-4">
-                            <label htmlFor="timeDuration" className="block mb-2 font-semibold">Time Duration (MONTHS): </label>
-                            <input
-                                type="number"
-                                id="timeDuration"
-                                value={editTimeDuration}
-                                onChange={(e) => setEditTimeDuration(e.target.value)}
-                                className="border rounded-md px-3 py-2 w-full"
-                                placeholder="Enter time duration"
-                            />
-                        </div>
-                        <div className="flex justify-end">
-                            <button
-                                onClick={() => {
-                                    setEditCourceId(null);
-                                    setEditCourseName("");
-                                    setEditTimeDuration("");
-                                    setEditHasLevels(""); // Reset editHasLevels when cancelling
-                                }}
-                                className="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleSaveChanges}
-                                className="mx-0 ml-5 px-3 py-1 focus:outline-none bg-blue-600 text-white hover:bg-opacity-50"
-                            >
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
+    
         </DefaultLayout>
     );
 };
 
 export default StudentPage;
-

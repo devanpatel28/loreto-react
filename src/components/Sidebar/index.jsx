@@ -10,6 +10,7 @@ import { RiListSettingsFill } from "react-icons/ri";
 import { RiKey2Line } from "react-icons/ri";
 import { RxHamburgerMenu } from "react-icons/rx";
 import Swal from 'sweetalert2';
+import { underDev } from '../../helper/alert';
 
 
 
@@ -217,27 +218,30 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </li>
 
               <li>
-                <NavLink
+                {/* <NavLink
                   to="/students"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
                     }`}
-                >
-                    <FaUsers size={23} />
-                  Holiday
-                </NavLink>
+                > */}
+                    
+                  <button className={`group relative flex w-full  items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
+                    'bg-graydark dark:bg-meta-4'
+                    }`} onClick={()=>underDev()}><FaUsers size={23} /> Holiday</button>
+                {/* </NavLink> */}
               </li>
 
               <li>
-                <NavLink
+                {/* <NavLink
                   to="/students"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
                     }`}
-                >
-                    <FaUsers size={23} />
-                  Events
-                </NavLink>
+                > */}
+                    <button className={`group relative flex w-full  items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
+                    'bg-graydark dark:bg-meta-4'
+                    }`} onClick={()=>underDev()}><FaUsers size={23} /> Events</button>
+                {/* </NavLink> */}
               </li>
               <li>
                 <button onClick={handleLogout} className={`group relative w-full flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 text-red-500 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('logout') &&
