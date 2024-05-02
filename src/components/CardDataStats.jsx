@@ -16,9 +16,7 @@ const CardDataStats = ({
       <center>
       <div className="mt-1.5">
         <div>
-          <span className="mr-2 text-title-md font-bold text-black dark:text-white">
-            {total}
-          </span>
+          <span className="mr-2 text-title-md font-bold text-black dark:text-white">{total}</span>
           <span className="text-lg   font-semibold">{title}</span>
         </div>
 

@@ -43,42 +43,42 @@
         useEffect(() => {
             // Fetch course names for each concept
             data.forEach((concept) => {
-                fetchCourseName(concept.courseId);
-                if(concept.courseLevelId===null){
+                fetchCourseName(concept.course_id);
+                if(concept.course_level_id===null){
                     setLevelNames(prevState => ({
                         ...prevState,
-                        [concept.courseLevelId]: 'No Level'
+                        [concept.course_level_id]: 'No Level'
                     }));
                 }
                 else
                 {
-                    fetchLevelName(concept.courseLevelId);
+                    fetchLevelName(concept.course_level_id);
                 }
             });
         }, [data]);
 
-        const fetchCourseName = async (courseId) => {
+        const fetchCourseName = async (course_id) => {
             try {
                 const response = await axios.post(FIND_COURSE_API, {
-                    id: courseId,
+                    id: course_id,
                 });
                 setCourseNames(prevState => ({
                     ...prevState,
-                    [courseId]: response.data.data.course_name
+                    [course_id]: response.data.data.course_name
                 }));
             } catch (error) {
                 console.error("Error fetching course name:", error);
             }
         };
 
-        const fetchLevelName = async (courseLevelId) => {
+        const fetchLevelName = async (course_level_id) => {
             try {
                 const response = await axios.post(FIND_COURSELEVELS_API, {
-                    id: courseLevelId,
+                    id: course_level_id,
                 });
                 setLevelNames(prevState => ({
                     ...prevState,
-                    [courseLevelId]: response.data.data.level_name
+                    [course_level_id]: response.data.data.level_name
                 }));
             } catch (error) {
                 console.error("Error fetching course name:", error);
@@ -178,15 +178,15 @@
                 }
             } else if (sortBy === 'course_name') {
                 if (sortOrder === 'asc') {
-                    return (courseNames[a.courseId] || '').localeCompare(courseNames[b.courseId] || '');
+                    return (courseNames[a.course_id] || '').localeCompare(courseNames[b.course_id] || '');
                 } else {
-                    return (courseNames[b.courseId] || '').localeCompare(courseNames[a.courseId] || '');
+                    return (courseNames[b.course_id] || '').localeCompare(courseNames[a.course_id] || '');
                 }
             } else if (sortByLevelName === 'level_name') {
                 if (sortOrderLevelName === 'asc') {
-                    return (levelNames[a.courseLevelId] || '').localeCompare(levelNames[b.courseLevelId] || '');
+                    return (levelNames[a.course_level_id] || '').localeCompare(levelNames[b.course_level_id] || '');
                 } else {
-                    return (levelNames[b.courseLevelId] || '').localeCompare(levelNames[a.courseLevelId] || '');
+                    return (levelNames[b.course_level_id] || '').localeCompare(levelNames[a.course_level_id] || '');
                 }
             } else {
                 return 0;
@@ -208,10 +208,10 @@
                 return search === '' ? true : concept.concept_name.toLowerCase().includes(search.toLowerCase());
             }
             if (searchCriteria === 'level_name') {
-                return search === '' ? true : levelNames[concept.courseLevelId].toLowerCase().includes(search.toLowerCase());
+                return search === '' ? true : levelNames[concept.course_level_id].toLowerCase().includes(search.toLowerCase());
             }
             if (searchCriteria === 'course_name') {
-                return search === '' ? true : courseNames[concept.courseId].toLowerCase().includes(search.toLowerCase());
+                return search === '' ? true : courseNames[concept.course_id].toLowerCase().includes(search.toLowerCase());
             }
             return search === '' ? true : concept.concept_name.toLowerCase().includes(search.toLowerCase());
         });
@@ -313,12 +313,12 @@
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-7 dark:border-strokedark">
                                             <p className="text-black dark:text-white">
-                                                {levelNames[concept.courseLevelId] || 'Loading...'}
+                                                {levelNames[concept.course_level_id] || 'Loading...'}
                                             </p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-7 dark:border-strokedark">
                                             <p className="text-black dark:text-white">
-                                                {courseNames[concept.courseId] || 'Loading...'}
+                                                {courseNames[concept.course_id] || 'Loading...'}
                                             </p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

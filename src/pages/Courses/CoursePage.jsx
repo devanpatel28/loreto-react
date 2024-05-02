@@ -43,7 +43,7 @@ const CoursePage = () => {
         if (cource) {
             setEditCourceId(id);
             setEditCourseName(cource.course_name);
-            setEditTimeDuration(cource.timeDuration);
+            setEditTimeDuration(cource.time_duration);
             setEditHasLevels(cource.has_levels);
         }
     };
@@ -56,7 +56,7 @@ const CoursePage = () => {
             await axios.put(CHANGE_COURSE_API, {
                 id: editCourseId,
                 course_name: editCourseName,
-                timeDuration: editTimeDuration,
+                time_duration: editTimeDuration,
                 has_levels: editHasLevels,
             });
 
@@ -101,12 +101,12 @@ const CoursePage = () => {
             <Breadcrumb pageName="Courses" />
             <div className="flex justify-normal items-center mb-4 w-50">
                 <div>
-                    <NavLink to="/add-cource">
-                        <button onClick={() => setShowModal(true)}
+                    <NavLink to="/add-course">
+                        <button
                             class="min-w-50 inline-flex items-center justify-center gap-2.5 bg-graydark py-3 border-2 text-center font-medium text-white duration-200 ease-in-out hover:bg-opacity-0 hover:text-graydark hover:border-2"
                         >
                             <IoAdd size={30} />
-                            Add Cource
+                            Add Course
                         </button>
                     </NavLink>
                 </div>
@@ -175,7 +175,7 @@ const CoursePage = () => {
 
                                     <td className="border-b border-[#eee] py-5 px-7 dark:border-strokedark">
                                         <p className="text-black dark:text-white">
-                                            {cource.timeDuration} Months
+                                            {cource.time_duration} Months
                                         </p>
                                     </td>
 
@@ -261,10 +261,10 @@ const CoursePage = () => {
                         </div>
                         
                         <div className="mb-4">
-                            <label htmlFor="timeDuration" className="block mb-2 font-semibold">Time Duration (MONTHS): </label>
+                            <label htmlFor="time_duration" className="block mb-2 font-semibold">Time Duration (MONTHS): </label>
                             <input
                                 type="number"
-                                id="timeDuration"
+                                id="time_duration"
                                 value={editTimeDuration}
                                 onChange={(e) => setEditTimeDuration(e.target.value)}
                                 className="border rounded-md px-3 py-2 w-full"

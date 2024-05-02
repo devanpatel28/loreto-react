@@ -11,7 +11,7 @@ const AddCoursePage = () => {
   const [formData, setFormData] = useState({
     course_name: "",
     has_levels: 1,
-    timeDuration: "",
+    time_duration: "",
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ const AddCoursePage = () => {
       setFormData({
         course_name: "",
         has_levels: 1,
-        timeDuration: "",
+        time_duration: "",
       });
     }
   };
@@ -93,8 +93,8 @@ const AddCoursePage = () => {
                 </label>
                 <input
                   type="number"
-                  name="timeDuration"
-                  value={formData.timeDuration}
+                  name="time_duration"
+                  value={formData.time_duration}
                   onChange={handleChange}
                   placeholder="Time Duration"
                   className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"

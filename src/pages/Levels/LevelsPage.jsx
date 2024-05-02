@@ -38,18 +38,18 @@ const LevelsPage = () => {
     useEffect(() => {
         // Fetch course names for each level
         data.forEach((level) => {
-            fetchCourseName(level.courseId);
+            fetchCourseName(level.course_id);
         });
     }, [data]);
 
-    const fetchCourseName = async (courseId) => {
+    const fetchCourseName = async (course_id) => {
         try {
             const response = await axios.post(FIND_COURSE_API, {
-                id: courseId,
+                id: course_id,
             });
             setCourseNames(prevState => ({
                 ...prevState,
-                [courseId]: response.data.data.course_name
+                [course_id]: response.data.data.course_name
             }));
         } catch (error) {
             console.error("Error fetching course name:", error);
@@ -131,9 +131,9 @@ const LevelsPage = () => {
             }
         } else if (sortBy === 'course_name') {
             if (sortOrder === 'asc') {
-                return (courseNames[a.courseId] || '').localeCompare(courseNames[b.courseId] || '');
+                return (courseNames[a.course_id] || '').localeCompare(courseNames[b.course_id] || '');
             } else {
-                return (courseNames[b.courseId] || '').localeCompare(courseNames[a.courseId] || '');
+                return (courseNames[b.course_id] || '').localeCompare(courseNames[a.course_id] || '');
             }
         } else {
             return 0;
@@ -231,7 +231,7 @@ const LevelsPage = () => {
 
                                     <td className="border-b border-[#eee] py-5 px-7 dark:border-strokedark">
                                         <p className="text-black dark:text-white">
-                                            {courseNames[level.courseId] || 'Loading...'}
+                                            {courseNames[level.course_id] || 'Loading...'}
                                         </p>
                                     </td>
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

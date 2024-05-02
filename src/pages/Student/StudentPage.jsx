@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, Route } from "react-router-dom";
 import Breadcrumb from "../../components/BreadCrumb/BreadCrumb";
 import DefaultLayout from "../../layout/DefaultLayout";
 import { IoAdd } from "react-icons/io5";
@@ -7,7 +7,7 @@ import axios from "axios";
 import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdEdit } from "react-icons/md";
-import {FIND_SHIFT_API, GET_STUDENT_API } from "../../helper/api";
+import { FIND_SHIFT_API, GET_STUDENT_API } from "../../helper/api";
 import { underDev } from "../../helper/alert";
 
 
@@ -16,7 +16,10 @@ const StudentPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [data, setData] = useState([]);
-    const [shiftName, setShiftName] = useState([]);
+    const [shift_name, setShiftName] = useState([]);
+
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -34,18 +37,19 @@ const StudentPage = () => {
     useEffect(() => {
         // Fetch course names for each level
         data.forEach((student) => {
-            fetchShiftName(student.shiftdatumId);
+            fetchShiftName(student.shiftdatum_id);
         });
     }, [data]);
 
-    const fetchShiftName = async (shiftdatumId) => {
+    const fetchShiftName = async (shiftdatum_id) => {
         try {
-            console.log("Shift ID:", shiftdatumId);
+            console.log("Shift ID:", shiftdatum_id);
             const response = await axios.post(FIND_SHIFT_API, {
-                id:shiftdatumId,
+                id: shiftdatum_id,
             });
-            console.log("Shift Name:", response.data.data.shiftName);
-            setShiftName(prevState => ({...prevState,[shiftdatumId]: response.data.data.shiftName
+            console.log("Shift Name:", response.data.data.shift_name);
+            setShiftName(prevState => ({
+                ...prevState, [shiftdatum_id]: response.data.data.shift_name
             }));
         } catch (error) {
             console.error("Error fetching Shift name:", error);
@@ -61,8 +65,11 @@ const StudentPage = () => {
     const filteredData = data.filter((student) => {
         return search === '' ? student : student.full_name.toLowerCase().includes(search.toLowerCase());
     });
-    
 
+    const handleViewClick = (studentID) => {
+        localStorage.setItem("selectedStudent", studentID);
+        
+    };
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -77,7 +84,7 @@ const StudentPage = () => {
             <div className="flex justify-normal items-center mb-4 w-50">
                 <div>
                     <NavLink to="/add-student">
-                        <button onClick={() => setShowModal(true)}
+                        <button
                             class="min-w-50 inline-flex items-center justify-center gap-2.5 bg-graydark py-3 border-2 text-center font-medium text-white duration-200 ease-in-out hover:bg-opacity-0 hover:text-graydark hover:border-2"
                         >
                             <IoAdd size={30} />
@@ -112,12 +119,12 @@ const StudentPage = () => {
                             <tr className="bg-red-50 text-left dark:bg-meta-4">
                                 <th className="min-w-10 py-4 px-2 font-medium text-black dark:text-white ">
                                     <span className="flex items-center gap-1">
-                                    Student ID
+                                        Student ID
                                     </span>
                                 </th>
                                 <th className="min-w-[20px] py-4 px-2 font-medium text-black dark:text-white ">
                                     <span className="flex items-center gap-1">
-                                    Name
+                                        Name
                                     </span>
                                 </th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">
@@ -150,7 +157,7 @@ const StudentPage = () => {
 
                                     <td className="border-b border-[#eee] py-5 px-5 dark:border-strokedark">
                                         <p className="text-black dark:text-white">
-                                            {shiftName[student.shiftdatumId]}
+                                            {shift_name[student.shiftdatum_id]}
                                         </p>
                                     </td>
 
@@ -162,9 +169,19 @@ const StudentPage = () => {
 
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <div className="flex items-center space-x-3.5">
-                                            <button onClick={()=> underDev()} class="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
-                                                VIEW
-                                            </button>
+                                            <Link
+                                                to={{
+                                                    pathname: "/view-student",
+                                                    state: { student: student }
+                                                }}
+                                                onClick={() => handleViewClick(student.id)} // Update this line
+                                            >
+                                                <button
+                                                    class="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50"
+                                                >
+                                                    VIEW
+                                                </button>
+                                            </Link>
                                         </div>
                                     </td>
                                 </tr>
@@ -177,7 +194,7 @@ const StudentPage = () => {
                     <button
                         onClick={() => paginate(currentPage - 1)}
                         className={`mx-1 px-3 py-1 focus:outline-none 
-                    ${currentPage === 1 ? 'bg-gray-300 text-gray-700 cursor-not-allowed' : 'bg-graydark text-white hover:bg-opacity-90'}`}
+                        ${currentPage === 1 ? 'bg-gray-300 text-gray-700 cursor-not-allowed' : 'bg-graydark text-white hover:bg-opacity-90'}`}
                         disabled={currentPage === 1}
                     >
                         Previous
@@ -189,7 +206,7 @@ const StudentPage = () => {
                             key={number}
                             onClick={() => paginate(number + 1)}
                             className={`mx-1 px-3 py-1 squ-full focus:outline-none 
-                        ${currentPage === number + 1 ? 'rounded-md bg-graydark text-white' : 'bg-gray-300 text-gray-700 hover:bg-opacity-90'}`}
+                            ${currentPage === number + 1 ? 'rounded-md bg-graydark text-white' : 'bg-gray-300 text-gray-700 hover:bg-opacity-90'}`}
                         >
                             {number + 1}
                         </button>
@@ -199,7 +216,7 @@ const StudentPage = () => {
                     <button
                         onClick={() => paginate(currentPage + 1)}
                         className={`mx-1 px-3 py-1 focus:outline-none 
-                    ${currentPage === Math.ceil(data.length / itemsPerPage) ? 'bg-gray-300 text-gray-700 cursor-not-allowed' : 'bg-graydark text-white hover:bg-opacity-90'}`}
+                        ${currentPage === Math.ceil(data.length / itemsPerPage) ? 'bg-gray-300 text-gray-700 cursor-not-allowed' : 'bg-graydark text-white hover:bg-opacity-90'}`}
                         disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
                     >
                         Next
@@ -207,7 +224,7 @@ const StudentPage = () => {
                 </div>
 
             </div>
-    
+
         </DefaultLayout>
     );
 };

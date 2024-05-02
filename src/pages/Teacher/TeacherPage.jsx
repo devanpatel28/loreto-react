@@ -3,12 +3,9 @@ import { Link, NavLink } from "react-router-dom";
 import Breadcrumb from "../../components/BreadCrumb/BreadCrumb";
 import DefaultLayout from "../../layout/DefaultLayout";
 import { IoAdd } from "react-icons/io5";
-import axios from "axios";
-import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { MdEdit } from "react-icons/md";
+import axios from "axios";  
 import { GET_TEACHER_API,CHANGE_TYPE_API,CHANGE_USER_STATUS_API } from "../../helper/api";
-import { data } from "autoprefixer";
+
 import Swal from "sweetalert2";
 
 const TeacherPage = () => {
@@ -47,7 +44,7 @@ const TeacherPage = () => {
         if (teacher) {
           setEditTeacherId(id);
           setEditUserType(teacher.login.type);
-          setEditUserStatus(teacher.login.isActive);
+          setEditUserStatus(teacher.login.is_active);
         }
       };
     
@@ -59,9 +56,9 @@ const TeacherPage = () => {
             type: editUserType,
           });
           console.log("editUserStatus",editUserStatus);
-          console.log("teacher.login.isActive",teacher.login.isActive);
+          console.log("teacher.login.is_active",teacher.login.is_active);
 
-          if (editUserStatus!=teacher.login.isActive) {
+          if (editUserStatus!=teacher.login.is_active) {
             await axios.put(CHANGE_USER_STATUS_API, {
               id: editTeacherId,
             });
@@ -219,12 +216,12 @@ const TeacherPage = () => {
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                     <p
                                         className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                                            teacher.login.isActive == 1
+                                            teacher.login.is_active == 1
                                                 ? 'bg-success text-success'
                                                 : 'bg-danger text-danger'
                                         }`}
                                     >
-                                        {teacher.login.isActive == 1 ? 'Active' : 'Inactive'}
+                                        {teacher.login.is_active == 1 ? 'Active' : 'Inactive'}
                                     </p>
                                 </td>
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

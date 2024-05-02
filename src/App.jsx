@@ -3,8 +3,6 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import Dashboard from './pages/Dashboard/Dashboard';
-
-import SubjectPaper from './pages/QPG/SubjectPaper';
 import CoursePage from './pages/Courses/CoursePage';
 import LoginPage from './Temp/LoginPage';
 import TeacherPage from './pages/Teacher/TeacherPage';
@@ -16,6 +14,7 @@ import AddLevelPage from './pages/Levels/AddLevelPage';
 import AddTopic from './pages/Topics/AddTopic';
 import AddStudent from './pages/Student/AddStudentPage';
 import StudentPage from './pages/Student/StudentPage';
+import ViewStudent from './pages/Student/ViewStudent';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -42,9 +41,9 @@ function App() {
           }
         />
       
-        <Route path="/manage/manage-cources" element={
+        <Route path="/manage/manage-courses" element={
             <>
-              <PageTitle title="Cource" />
+              <PageTitle title="Courses" />
               <CoursePage />
             </>
           }
@@ -84,7 +83,7 @@ function App() {
             </>
           }
         />
-        <Route path="/add-cource" element={
+        <Route path="/add-course" element={
             <>
               <PageTitle title="Add Cource" />
               <AddCoursePage />
@@ -95,6 +94,13 @@ function App() {
             <>
               <PageTitle title="Add Level" />
               <AddLevelPage />
+            </>
+          }
+        />
+         <Route path="/view-student" element={
+            <>
+              <PageTitle title="Student Profile" />
+              <ViewStudent />
             </>
           }
         />
@@ -130,13 +136,6 @@ function App() {
             <>
               <PageTitle title="Calendar | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               {/* <Calendar /> */}
-            </>
-          }
-        />
-        <Route path='/qpaper/set-subject-paper' element={
-            <>
-              <PageTitle title="Set Subject Paper" />
-              <SubjectPaper />
             </>
           }
         />

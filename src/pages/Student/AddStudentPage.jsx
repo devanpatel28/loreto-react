@@ -9,14 +9,15 @@ import Swal from "sweetalert2"; // Import SweetAlert
 
 const AddStudent = () => {
   const [formData, setFormData] = useState({
-    full_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     mobile_number: "",
-    courseId: "",
-    lastMonthDate: "",
-    courseLevelId: "",
-    shiftdatumId: "",
-    logindatumId: "",
+    course_id: "",
+    last_month: "",
+    course_level_id: "",
+    shiftdatum_id: "",
+    logindatum_id: "",
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -51,10 +52,10 @@ const AddStudent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const { full_name, email, mobile_number, shiftdatumId, courseLevelId, courseId, lastMonthDate } = formData;
+    const { firstName,lastName, email, mobile_number, shiftdatum_id, course_level_id, course_id, last_month } = formData;
 
     // Generate username
-    const username = `${full_name}${new Date().getDate()}${new Date().getMonth() + 1}${new Date().getFullYear()}`;
+    const username = `${firstName}${new Date().getDate()}${new Date().getMonth() + 1}${new Date().getFullYear()}`;
     const password = username;
     try {
       const loginResponse = await axios.post(ADD_LOGIN_API, {
@@ -62,7 +63,7 @@ const AddStudent = () => {
         password,
         email: email,
         type: "student",
-        isActive: true,
+        is_active: true,
       });
 
       if (loginResponse.status == 200) {
@@ -73,29 +74,29 @@ const AddStudent = () => {
         const studentLoginID = studentIdResponse.data.data.id;
 
         const addStudentResponse = await axios.post(ADD_STUDENT_API, {
-          full_name: full_name,
+          full_name:`${firstName} ${lastName}`,
           email: email,
           mobile_number: mobile_number,
-          shiftdatumId: shiftdatumId,
-          logindatumId: studentLoginID,
+          shiftdatum_id: shiftdatum_id,
+          logindatum_id: studentLoginID,
         });
 
         const studentID = addStudentResponse.data.data.id;
         const today = new Date();
         console.log(today + "----- today");
-        console.log(lastMonthDate + "----- lastMonthDate");
+        console.log(last_month + "----- last_month");
         console.log(studentID + "----- studentID");
-        console.log(courseId + "----- courseId");
-        console.log(courseLevelId + "----- courseLevelId");
+        console.log(course_id + "----- course_id");
+        console.log(course_level_id + "----- course_level_id");
 
         const addCourseEnroll = await axios.post(ADD_COURSEENROLL_API, {
           enrollment_date: today,
           is_current_course: 1,
-          last_month: lastMonthDate,
+          last_month: last_month,
           course_status: 1,
-          studentdatumId: studentID,
-          courseId: courseId,
-          courseLevelId: courseLevelId || null,
+          studentdatum_id: studentID,
+          course_id: course_id,
+          course_level_id: course_level_id || null,
         });
 
         const emailResponse = await axios.post(MAIL_API, {
@@ -103,7 +104,7 @@ const AddStudent = () => {
           subject: "Welcome to LORETO",
           text: "",
           html: `
-            <h2><p>Dear ${full_name},</p></h2>
+            <h2><p>Dear ${firstName} ${lastName},</p></h2>
             <h4><p>Welcome to LORETO! We're thrilled to have you join us.</p></h4>
             <h4><p>Your login credentials:</p></h4>
             <p><strong>Username:</strong> ${username}</p>
@@ -121,14 +122,15 @@ const AddStudent = () => {
           showConfirmButton: false,
         });
         setFormData({
-          full_name: "",
+          firstName: "",
+          lastName: "",
           email: "",
           mobile_number: "",
-          courseId: "",
-          lastMonthDate: "",
-          courseLevelId: "",
-          shiftdatumId: "",
-          logindatumId: "",
+          course_id: "",
+          last_month: "",
+          course_level_id: "",
+          shiftdatum_id: "",
+          logindatum_id: "",
         });
         navigate('/manage-student')
       }
@@ -149,48 +151,39 @@ const AddStudent = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  // const today = new Date();
   const handleCourseChange = async (e) => {
-    const courseId = e.target.value;
-    const selectedCourse = courses.find(course => course.id === courseId);
-    // console.log(selectedCourse);
-    // console.log(selectedCourse.timeDuration+"----- selectedCourse.timeDuration");
-    // console.log(courseId+"----- coursesID");
-    setFormData({ ...formData, courseId, courseLevelId: "" });
-
+    const course_id = e.target.value;
+    console.log("Selected course ID:", course_id);
+    console.log(courses);
+    const selectedCourse = courses.find(course => course.id == course_id);
+    setFormData(prevState => ({
+      ...prevState,
+      course_id,
+      last_month: calculateLastMonthDate(selectedCourse.time_duration)
+    }));
     const calculateLastMonthDate = (courseDuration) => {
       const today = new Date();
-      // console.log(today+"----- today");
+      console.log(today+"----- today");
       const lastMonth = new Date(today.getFullYear(), today.getMonth() + courseDuration, today.getDate());
-      // console.log(lastMonth+"----- lastMonth");
+      console.log(lastMonth+"----- lastMonth");
       return lastMonth;
     };
 
     try {
-      const response = await axios.post(GET_COURSE_LEVEL_API, { courseId: courseId });
+      const response = await axios.post(GET_COURSE_LEVEL_API, { course_id: course_id });
       setLevels(response.data.data);
-      // Pass timeDuration to calculateLastMonthDate function
-      if (selectedCourse) {
-        const timeDuration = selectedCourse.timeDuration;
-        // console.log(timeDuration+"----- timeDuration");
-        const lastMonthDate = calculateLastMonthDate(timeDuration);
-        // console.log(lastMonthDate+"----- lastMonthDate");
-        setFormData({ ...formData, lastMonthDate: lastMonthDate });
-      }
     } catch (error) {
       console.error("Error fetching course levels:", error);
       setLevels([]);
     }
-
-
-
   };
 
   const handleLevelChange = (e) => {
-    setFormData({ ...formData, courseLevelId: e.target.value });
+    setFormData({ ...formData, course_level_id: e.target.value });
   };
   const handleShiftChange = (e) => {
-    setFormData({ ...formData, shiftdatumId: e.target.value });
+    setFormData({ ...formData, shiftdatum_id: e.target.value });
   };
 
   return (
@@ -202,19 +195,34 @@ const AddStudent = () => {
           {!loading && (
             <div className="p-6.5 w-180">
               <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                  Student Name <span className="text-meta-1">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="full_name"
-                  value={formData.full_name}
-                  onChange={handleChange}
-                  placeholder="Student Name"
-                  className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  required
-                />
-              </div>
+              <label className="mb-2.5 block text-black dark:text-white">
+                First Name <span className="text-meta-1">*</span>
+              </label>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="First Name"
+                className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                required              
+              />
+            </div>
+
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Last Name <span className="text-meta-1">*</span>
+              </label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Last Name"
+                className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                required              
+              />
+            </div>
 
               <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
@@ -250,8 +258,8 @@ const AddStudent = () => {
                   Select Shift <span className="text-meta-1">*</span>
                 </label>
                 <select
-                  name="shiftdatumId"
-                  value={formData.shiftdatumId}
+                  name="shiftdatum_id"
+                  value={formData.shiftdatum_id}
                   onChange={handleShiftChange}
                   className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   required
@@ -259,7 +267,7 @@ const AddStudent = () => {
                   <option value="">Select Shift</option>
                   {shifts.map((shift) => (
                     <option key={shift.id} value={shift.id}>
-                      {shift.shiftName}
+                      {shift.shift_name}
                     </option>
                   ))}
                 </select>
@@ -269,8 +277,8 @@ const AddStudent = () => {
                   Course Name <span className="text-meta-1">*</span>
                 </label>
                 <select
-                  name="courseId"
-                  value={formData.courseId}
+                  name="course_id"
+                  value={formData.course_id}
                   onChange={handleCourseChange}
                   className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   required
@@ -290,8 +298,8 @@ const AddStudent = () => {
                     Select Level <span className="text-meta-1">*</span>
                   </label>
                   <select
-                    name="courseLevelId"
-                    value={formData.courseLevelId}
+                    name="course_level_id"
+                    value={formData.course_level_id}
                     onChange={handleLevelChange}
                     className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     required
@@ -311,8 +319,8 @@ const AddStudent = () => {
                     Select Level <span className="text-meta-1">*</span>
                   </label>
                   <select
-                    name="courseLevelId"
-                    value={formData.courseLevelId}
+                    name="course_level_id"
+                    value={formData.course_level_id}
                     onChange={handleLevelChange}
                     disabled
                     className="w-full rounded border-[1.5px] border-gray-300 bg-gray-200 py-3 px-5 text-gray-400 outline-none transition focus:border-primary active:border-primary"

@@ -4,6 +4,7 @@ const PORT2 = 3000;
 
 export const CHECK_LOGIN_API = HOST+PORT1+"/api/login/check";
 export const ADD_LOGIN_API = HOST+PORT1+"/api/login/";
+export const GET_STUDENT_DATA_API = HOST+PORT1+"/api/login/getStudProfile";
 export const GET_TEACHER_API = HOST+PORT1+"/api/login/getTeacher";
 export const GET_USER_ID = HOST+PORT1+"/api/login/username";
 export const ADD_TEACHER_API = HOST+PORT1+"/api/teacher";

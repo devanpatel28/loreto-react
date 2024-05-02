@@ -10,7 +10,7 @@ import { GET_HAS_LEVEL_COURSE_API,ADD_LEVEL_API } from "../../helper/api";
 const AddLevelPage = () => {
   const [formData, setFormData] = useState({
     level_name: "",
-    courseId: "",
+    course_id: "",
   });
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
@@ -58,7 +58,7 @@ const AddLevelPage = () => {
       setLoading(false);
       setFormData({
         level_name: "",
-        courseId: "",
+        course_id: "",
       });
     }
   };
@@ -95,8 +95,8 @@ const AddLevelPage = () => {
                   Select Course : <span className="text-meta-1">*</span>
                 </label>
                 <select
-                  name="courseId"
-                  value={formData.courseId}
+                  name="course_id"
+                  value={formData.course_id}
                   onChange={handleChange}
                   className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   required

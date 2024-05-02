@@ -10,8 +10,8 @@ import Swal from "sweetalert2";
 const AddTopic = () => {
   const [formData, setFormData] = useState({
     concept_name: "",
-    courseId: "",
-    courseLevelId: "",
+    course_id: "",
+    course_level_id: "",
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -36,10 +36,10 @@ const AddTopic = () => {
   };
 
   const handleCourseChange = async (e) => {
-    const courseId = e.target.value;
-    setFormData({ ...formData, courseId, courseLevelId: "" });
+    const course_id = e.target.value;
+    setFormData({ ...formData, course_id, course_level_id: "" });
     try {
-      const response = await axios.post(GET_COURSE_LEVEL_API, { courseId: courseId });
+      const response = await axios.post(GET_COURSE_LEVEL_API, { course_id: course_id });
       setLevels(response.data.data);
     } catch (error) {
       console.error("Error fetching course levels:", error);
@@ -48,25 +48,25 @@ const AddTopic = () => {
   };
 
   const handleLevelChange = (e) => {
-    setFormData({ ...formData, courseLevelId: e.target.value });
+    setFormData({ ...formData, course_level_id: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { concept_name, courseId, courseLevelId } = formData;
+      const { concept_name, course_id, course_level_id } = formData;
       const dataToAdd = {
         concept_name: concept_name,
-        courseId: courseId,
-        courseLevelId: courseLevelId || null, // If no level is selected, default to 0
+        course_id: course_id,
+        course_level_id: course_level_id || null, // If no level is selected, default to 0
       };
       await axios.post(ADD_TOPIC_API, dataToAdd);
       // Clear form fields after successful submission
       setFormData({
         concept_name: "",
-        courseId: "",
-        courseLevelId: "",
+        course_id: "",
+        course_level_id: "",
       });
       setLoading(false);
       Swal.fire({
@@ -118,8 +118,8 @@ const AddTopic = () => {
                   Course Name <span className="text-meta-1">*</span>
                 </label>
                 <select
-                  name="courseId"
-                  value={formData.courseId}
+                  name="course_id"
+                  value={formData.course_id}
                   onChange={handleCourseChange}
                   className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   required
@@ -138,8 +138,8 @@ const AddTopic = () => {
                     Select Level <span className="text-meta-1">*</span>
                   </label>
                   <select
-                    name="courseLevelId"
-                    value={formData.courseLevelId}
+                    name="course_level_id"
+                    value={formData.course_level_id}
                     onChange={handleLevelChange}
                     className="w-full rounded border-[1.5px] border-blue-300 bg-white py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     required
@@ -159,8 +159,8 @@ const AddTopic = () => {
                     Select Level <span className="text-meta-1">*</span>
                   </label>
                   <select
-                    name="courseLevelId"
-                    value={formData.courseLevelId}
+                    name="course_level_id"
+                    value={formData.course_level_id}
                     onChange={handleLevelChange}
                     disabled
                     className="w-full rounded border-[1.5px] border-gray-300 bg-gray-200 py-3 px-5 text-gray-400 outline-none transition focus:border-primary active:border-primary"
