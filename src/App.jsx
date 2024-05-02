@@ -15,6 +15,8 @@ import AddTopic from './pages/Topics/AddTopic';
 import AddStudent from './pages/Student/AddStudentPage';
 import StudentPage from './pages/Student/StudentPage';
 import ViewStudent from './pages/Student/ViewStudent';
+import EventsPage from './pages/Events/EventsPage';
+import AddEvent from './pages/Events/AddEvent';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -101,6 +103,20 @@ function App() {
             <>
               <PageTitle title="Student Profile" />
               <ViewStudent />
+            </>
+          }
+        />
+        <Route path="/events" element={
+            <>
+              <PageTitle title="Events" />
+              <EventsPage />
+            </>
+          }
+        />
+        <Route path="/add-event" element={
+            <>
+              <PageTitle title="Add Event" />
+              <AddEvent />
             </>
           }
         />

@@ -4,7 +4,7 @@ const PORT2 = 3000;
 
 export const CHECK_LOGIN_API = HOST+PORT1+"/api/login/check";
 export const ADD_LOGIN_API = HOST+PORT1+"/api/login/";
-export const GET_STUDENT_DATA_API = HOST+PORT1+"/api/login/getStudProfile";
+export const GET_STUDENT_DATA_API = HOST+PORT1+"/api/login/getStudProfileWithAllCourse";
 export const GET_TEACHER_API = HOST+PORT1+"/api/login/getTeacher";
 export const GET_USER_ID = HOST+PORT1+"/api/login/username";
 export const ADD_TEACHER_API = HOST+PORT1+"/api/teacher";
@@ -30,3 +30,5 @@ export const ADD_STUDENT_API = HOST+PORT1+"/api/student";
 export const GET_STUDENT_API = HOST+PORT1+"/api/student";
 export const ADD_COURSEENROLL_API = HOST+PORT1+"/api/courseenrollment"; 
 export const FIND_SHIFT_API = HOST+PORT1+"/api/shift/find";
+export const ADD_EVENT_API = HOST+PORT1+"/api/events/"
+export const GET_EVENT_API = HOST+PORT1+"/api/events/"

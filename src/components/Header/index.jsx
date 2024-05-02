@@ -1,9 +1,20 @@
 import { Link } from 'react-router-dom';
 import DropdownUser from './DropdownUser';
 import LogoIcon from '../../images/logo/logo-icon.svg';
+import { useEffect, useState } from 'react';
 
 
 const Header = (props) => {
+  const [userdata,setUserdata] = useState([]);
+  const fullname = userdata.full_name;
+  useEffect(() => {
+    const temp = JSON.parse(localStorage.getItem("userdata"));
+   setUserdata(temp);
+    console.log(typeof(temp));
+    
+  }, [])
+
+  
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">

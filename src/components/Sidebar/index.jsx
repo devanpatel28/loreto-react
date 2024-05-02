@@ -4,7 +4,7 @@ import SidebarLinkGroup from './SidebarLinkGroup';
 import Logo from '../../images/logo/Loreto.png';
 import { HiOutlineLogout, HiOutlineViewGrid } from 'react-icons/hi'
 import { FaBook, FaBuilding, FaChevronDown, FaGraduationCap, FaRegListAlt, FaUserAlt ,FaUsers} from "react-icons/fa";
-import { IoMdAdd, IoMdSettings } from "react-icons/io";
+import { IoIosPeople, IoIosPerson, IoIosSunny, IoIosTrophy, IoMdAdd, IoMdMedal, IoMdPaper, IoMdSettings, IoMdTrophy } from "react-icons/io";
 import { CgFileDocument } from "react-icons/cg";
 import { RiListSettingsFill } from "react-icons/ri";
 import { RiKey2Line } from "react-icons/ri";
@@ -139,7 +139,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         }}
                       >
                         <div className='flex w-[22px] justify-center'>
-                          <FaBook size={18} />
+                          <IoMdPaper  size={23} />
                         </div>
                         Manage Cource
                         <FaChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 ${open && 'rotate-180'}`} />
@@ -200,7 +200,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     'bg-graydark dark:bg-meta-4'
                     }`}
                 >
-                    <FaUserAlt size={18} />
+                    <IoIosPerson size={23} />
                   Students
                 </NavLink>
               </li>
@@ -212,7 +212,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     'bg-graydark dark:bg-meta-4'
                     }`}
                 >
-                    <FaUsers size={23} />
+                    <IoIosPeople size={23} />
                   Teachers
                 </NavLink>
               </li>
@@ -227,21 +227,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     
                   <button className={`group relative flex w-full  items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
-                    }`} onClick={()=>underDev()}><FaUsers size={23} /> Holiday</button>
+                    }`} onClick={()=>underDev()}><IoIosSunny size={25} /> Holiday</button>
                 {/* </NavLink> */}
               </li>
 
               <li>
-                {/* <NavLink
-                  to="/students"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
-                    'bg-graydark dark:bg-meta-4'
-                    }`}
-                > */}
+                <NavLink
+                  to="/events">
                     <button className={`group relative flex w-full  items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
-                    }`} onClick={()=>underDev()}><FaUsers size={23} /> Events</button>
-                {/* </NavLink> */}
+                    }`}><IoIosTrophy size={23} /> Events</button>
+                </NavLink>
               </li>
               <li>
                 <button onClick={handleLogout} className={`group relative w-full flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 text-red-500 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('logout') &&
