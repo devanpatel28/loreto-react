@@ -17,6 +17,9 @@ import StudentPage from './pages/Student/StudentPage';
 import ViewStudent from './pages/Student/ViewStudent';
 import EventsPage from './pages/Events/EventsPage';
 import AddEvent from './pages/Events/AddEvent';
+import HolidaysPage from './pages/Holidays/HolidaysPage';
+import BooksPage from './pages/Books/BooksPage';
+import AddBook from './pages/Books/AddBook';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -129,8 +132,29 @@ function App() {
         />
         <Route path="/teachers" element={
             <>
-              <PageTitle title="Student" />
+              <PageTitle title="Teachers" />
               <TeacherPage />
+            </>
+          }
+        />
+         <Route path="/add-book" element={
+            <>
+              <PageTitle title="Add Book" />
+              <AddBook />
+            </>
+          }
+        />
+        <Route path="/books" element={
+            <>
+              <PageTitle title="Books" />
+              <BooksPage />
+            </>
+          }
+        />
+        <Route path="/holidays" element={
+            <>
+              <PageTitle title="Holidays" />
+              <HolidaysPage />
             </>
           }
         />

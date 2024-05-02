@@ -218,26 +218,22 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               </li>
 
               <li>
-                {/* <NavLink
-                  to="/students"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
-                    'bg-graydark dark:bg-meta-4'
-                    }`}
-                > */}
+                <NavLink
+                  to="/holidays"
+                >
                     
                   <button className={`group relative flex w-full  items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
-                    }`} onClick={()=>underDev()}><IoIosSunny size={25} /> Holiday</button>
-                {/* </NavLink> */}
+                    }`}><IoIosSunny size={25} /> Holiday</button>
+                </NavLink>
               </li>
-
               <li>
                 <NavLink
                   to="/events">
                     <button className={`group relative flex w-full  items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
                     'bg-graydark dark:bg-meta-4'
                     }`}><IoIosTrophy size={23} /> Events</button>
-                </NavLink>
+                </NavLink>  
               </li>
               <li>
                 <button onClick={handleLogout} className={`group relative w-full flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 text-red-500 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('logout') &&

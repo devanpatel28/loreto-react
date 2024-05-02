@@ -93,9 +93,9 @@ const EventsPage = () => {
                 </div>
             </div>
 
-            <div className={`grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-${isGridView ?2:1} gap-6`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-${isGridView?2:1} gap-6`}>
                 {sortedData.map((event, key) => (
-                    <div key={key} className={isGridView ? "w-full relative" : ""}>
+                    <div key={key} className={"w-full relative"}>
                         <div className="rounded-md overflow-hidden border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div className="p-4">
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">

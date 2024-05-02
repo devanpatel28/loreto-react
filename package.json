@@ -12,6 +12,7 @@
   "dependencies": {
     "apexcharts": "^3.41.0",
     "axios": "^1.6.8",
+    "firebase": "^10.11.1",
     "flatpickr": "^4.6.13",
     "headlessui": "^0.0.0",
     "jsvectormap": "^1.5.3",
