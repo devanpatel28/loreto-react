@@ -4,7 +4,7 @@ import SidebarLinkGroup from './SidebarLinkGroup';
 import Logo from '../../images/logo/Loreto.png';
 import { HiOutlineLogout, HiOutlineViewGrid } from 'react-icons/hi'
 import { FaBook, FaBuilding, FaChevronDown, FaGraduationCap, FaRegListAlt, FaUserAlt ,FaUsers} from "react-icons/fa";
-import { IoIosPeople, IoIosPerson, IoIosSunny, IoIosTrophy, IoMdAdd, IoMdMedal, IoMdPaper, IoMdSettings, IoMdTrophy } from "react-icons/io";
+import { IoIosChatboxes, IoIosPeople, IoIosPerson, IoIosSunny, IoIosTrophy, IoMdAdd, IoMdMedal, IoMdPaper, IoMdSettings, IoMdTrophy } from "react-icons/io";
 import { CgFileDocument } from "react-icons/cg";
 import { RiListSettingsFill } from "react-icons/ri";
 import { RiKey2Line } from "react-icons/ri";
@@ -216,7 +216,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   Teachers
                 </NavLink>
               </li>
-
+              <li>
+                <NavLink
+                  to="/chats"
+                >
+                    
+                  <button className={`group relative flex w-full  items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:text-white dark:hover:bg-meta-4 ${pathname.includes('calendar') &&
+                    'bg-graydark dark:bg-meta-4'
+                    }`}><IoIosChatboxes size={25} /> Chat</button>
+                </NavLink>
+              </li>
+            
               <li>
                 <NavLink
                   to="/holidays"

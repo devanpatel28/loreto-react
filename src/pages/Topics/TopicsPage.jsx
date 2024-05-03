@@ -218,7 +218,7 @@
 
         return (
             <DefaultLayout>
-                <Breadcrumb pageName="Levels" />
+                <Breadcrumb pageName="Topics" />
                 <div className="flex justify-normal items-center mb-4 w-50">
                     <div>
                         <NavLink to="/add-topics">

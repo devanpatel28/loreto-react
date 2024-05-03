@@ -38,3 +38,6 @@ export const GET_HOLIDAY_API = HOST+PORT2+"/api/holidays"
 export const CHANGE_HOLIDAY_API = HOST+PORT2+`/api/holidays/${PORT2=="8080"?"status":"update"}`
 export const GET_UPCOMING_HOLIDAY_API = HOST+PORT1+"/api/holidays/upcoming"
 export const GET_UPCOMING_EVENTS_API = HOST+PORT1+"/api/events/upcoming"
+export const ATTENDANCE_API = HOST+PORT1+"/api/attendance"
+export const TODAY_ATTENDANCE_API = HOST+PORT1+"/api/attendance/getToday"
+export const UPDATE_ATTENDANCE_API = HOST+PORT1+"/api/attendance/update"

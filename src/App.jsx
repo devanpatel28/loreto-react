@@ -20,6 +20,8 @@ import AddEvent from './pages/Events/AddEvent';
 import HolidaysPage from './pages/Holidays/HolidaysPage';
 import BooksPage from './pages/Books/BooksPage';
 import AddBook from './pages/Books/AddBook';
+import AttendancePage from './pages/Attendance/AttendancePage';
+import ChatPage from './pages/Chat/ChatPage';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -106,6 +108,20 @@ function App() {
             <>
               <PageTitle title="Student Profile" />
               <ViewStudent />
+            </>
+          }
+        />
+         <Route path="/attendance" element={
+            <>
+              <PageTitle title="Attendance" />
+              <AttendancePage />
+            </>
+          }
+        />
+        <Route path="/chats" element={
+            <>
+              <PageTitle title="Chats" />
+              <ChatPage />
             </>
           }
         />

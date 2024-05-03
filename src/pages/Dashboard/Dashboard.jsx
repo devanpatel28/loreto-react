@@ -135,7 +135,9 @@ const Dashboard = () => {
               </svg>
             </CardDataStats>
           </Link>
-          {/* <CardDataStats total="Attendance">
+
+          <Link to="/attendance">
+          <CardDataStats total="Attendance">
             <svg
               className="fill-primary dark:fill-white"
               width="35"
@@ -148,8 +150,8 @@ const Dashboard = () => {
               <path fill="#FF3131"
                 d="M41,49.11a5,5,0,0,1-3.59-1.53l-4.59-4.75a2,2,0,1,1,2.87-2.78l4.6,4.75a1,1,0,0,0,1.55-.14l8.31-12.6a2,2,0,1,1,3.34,2.2l-8.31,12.6a5,5,0,0,1-3.71,2.22A3.71,3.71,0,0,1,41,49.11Z" />
             </svg>
-          </CardDataStats> */}
-
+          </CardDataStats>
+          </Link>
 
           <Link to="/holidays">
             <CardDataStats total="Holiday">

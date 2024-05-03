@@ -7,7 +7,7 @@ const CardDataStats = ({
   children,
 }) => {
   return (
-    <div className=" h-30 w-60  transform hover:scale-105 duration-200 ease-in-out rounded-sm border border-stroke bg-white py-4 px-7 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className=" h-30 w-60  transform hover:scale-105 duration-200 ease-in-out rounded-md border border-stroke bg-white py-4 px-7 shadow-default dark:border-strokedark dark:bg-boxdark">
       <center>
       <div className="flex h-13 w-13 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
         {children}
