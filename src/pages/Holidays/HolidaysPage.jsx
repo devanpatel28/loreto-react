@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/BreadCrumb/BreadCrumb";
 import DefaultLayout from "../../layout/DefaultLayout";
 import { IoAdd } from "react-icons/io5";
@@ -9,6 +9,7 @@ import { GET_TEACHER_API, CHANGE_TYPE_API, CHANGE_USER_STATUS_API, GET_HOLIDAY_A
 import Swal from "sweetalert2";
 
 const HolidaysPage = () => {
+    const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const [searchCriteria, setSearchCriteria] = useState('full_name');
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +33,7 @@ const HolidaysPage = () => {
     }, []);
 
 
-    const changeStatus= async (Hid) =>
+    const changeStatus= async (Hid,HDame,HDate,HStatus) =>
     {
         console.log(Hid);
         Swal.fire({
@@ -45,13 +46,21 @@ const HolidaysPage = () => {
           }).then(async (result) => {
             if (result.isConfirmed) {
                 await axios.put(CHANGE_HOLIDAY_API,
-                    { params: {id:Hid} } 
+                    {
+                        id: Hid,
+                        holiday_name: HDame,
+                        holiday_date: HDate,
+                        is_holiday: !HStatus
+                    } 
             );
               Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
-                icon: "success"
+                title: "Updated!",
+                text: "Changes successfully saved!",
+                icon: "success",
+                showConfirmButton: false,
               });
+                window.location.reload();
+                navigate('/holidays')
             }
           });
     }
@@ -137,7 +146,7 @@ const HolidaysPage = () => {
                                     </td>
                                     <td className="border-b border-[#eee] py-2 px-4 dark:border-strokedark">
                                         <div className="flex items-center space-x-3.5">
-                                            <button onClick={() =>changeStatus(holiday.id)} class="mx-0 px-2 text-sm py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
+                                            <button onClick={() =>changeStatus(holiday.id,holiday.holiday_name,holiday.holiday_date,holiday.is_holiday)} class="mx-0 px-2 text-sm py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
                                                 Change Status
                                             </button>
                                         </div>

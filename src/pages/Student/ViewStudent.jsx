@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 
 const ViewStudent = () => {
     const [Data, setData] = useState([]);
-    const [addCourseID, setAddCourseID] = useState(null);
+    const [viewPopup, setViewpopup] = useState(null);
     var address = "";
     const [courses, setCourses] = useState([]);
     const [levels, setLevels] = useState([]);
@@ -100,7 +100,7 @@ const ViewStudent = () => {
                 course_id: course_id,
                 course_level_id: course_level_id || null,
             });
-            setAddCourseID(null);
+            setViewpopup(null);
             await Swal.fire({
                 icon: "success",
                 text: "Student added successfully!",
@@ -128,7 +128,7 @@ const ViewStudent = () => {
 
     const viewPopUp = () => {
         event.preventDefault();
-        setAddCourseID(true);
+        setViewpopup(true);
     };
 
 
@@ -225,7 +225,7 @@ const ViewStudent = () => {
                         </div>
                     </form>
                 </div>
-                {addCourseID &&(
+                {viewPopup &&(
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
                         <div className="bg-white p-5 rounded-md shadow-lg w-80 h-55">
                             <h2 className="text-lg font-bold mb-5">Add Course</h2>
@@ -287,7 +287,7 @@ const ViewStudent = () => {
                                 <button
                                     type="button"
                                     onClick={() => 
-                                        setAddCourseID(null)
+                                        setViewpopup(null)
                                     }
                                     className="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
                                     Cancel

@@ -119,7 +119,7 @@ const StudentPage = () => {
                             <tr className="bg-red-50 text-left dark:bg-meta-4">
                                 <th className="min-w-10 py-4 px-2 font-medium text-black dark:text-white ">
                                     <span className="flex items-center gap-1">
-                                        Student ID
+                                       No.
                                     </span>
                                 </th>
                                 <th className="min-w-[20px] py-4 px-2 font-medium text-black dark:text-white ">
@@ -144,7 +144,7 @@ const StudentPage = () => {
                                 <tr key={key}>
                                     <td className="border-b border-[#eee] py-5 px-5  dark:border-strokedark ">
                                         <h5 className="font-medium text-black dark:text-white">
-                                            {student.id}
+                                            {key+1}
                                         </h5>
 
                                     </td>
