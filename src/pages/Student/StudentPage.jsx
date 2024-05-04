@@ -7,8 +7,9 @@ import axios from "axios";
 import { FcAlphabeticalSortingAz, FcAlphabeticalSortingZa, FcNumericalSorting12, FcNumericalSorting21 } from "react-icons/fc";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdEdit } from "react-icons/md";
-import { FIND_SHIFT_API, GET_STUDENT_API } from "../../helper/api";
+import { CHANGE_TYPE_API, CHANGE_USER_STATUS_API, FIND_SHIFT_API, GET_STUDENT_API, GET_STUDENT_LIST_API } from "../../helper/api";
 import { underDev } from "../../helper/alert";
+import Swal from "sweetalert2";
 
 
 const StudentPage = () => {
@@ -17,14 +18,17 @@ const StudentPage = () => {
     const [itemsPerPage, setItemsPerPage] = useState(5);
     const [data, setData] = useState([]);
     const [shift_name, setShiftName] = useState([]);
-
+    const [editStudentId, seteditStudentId] = useState(null);
+    const [editUserType, setEditUserType] = useState("");
+    const [editUserStatus, setEditUserStatus] = useState("");
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(GET_STUDENT_API);
+                const response = await axios.get(GET_STUDENT_LIST_API);
                 setData(response.data.data);
+                console.log("Student Data:", response.data.data)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -37,11 +41,12 @@ const StudentPage = () => {
     useEffect(() => {
         // Fetch course names for each level
         data.forEach((student) => {
-            fetchShiftName(student.shiftdatum_id);
+            fetchShiftName(student.userdata.shiftdatum_id);
         });
     }, [data]);
 
     const fetchShiftName = async (shiftdatum_id) => {
+        console.log("In function Shift ID:", shiftdatum_id);
         try {
             console.log("Shift ID:", shiftdatum_id);
             const response = await axios.post(FIND_SHIFT_API, {
@@ -55,8 +60,51 @@ const StudentPage = () => {
             console.error("Error fetching Shift name:", error);
         }
     };
+   
+    const editTeacher = (id) => {
+        const teacher = data.find((teacher) => teacher.login.id === id);
+        if (teacher) {
+            seteditStudentId(id);
+            setEditUserType(teacher.login.type);
+            setEditUserStatus(teacher.login.is_active);
+        }
+    };
 
+    const saveChanges = async () => {
+        try {
+        const teacher = data.find((teacher) => teacher.login.id === editStudentId);
+          await axios.put(CHANGE_TYPE_API, {
+            id: editStudentId,
+            type: editUserType,
+          });
+          console.log("editUserStatus",editUserStatus);
+          console.log("teacher.login.is_active",teacher.login.is_active);
 
+          if (editUserStatus!=teacher.login.is_active) {
+            await axios.put(CHANGE_USER_STATUS_API, {
+              id: editStudentId,
+            });
+          }
+
+          Swal.fire({
+            icon: "success",
+            text: "Changes saved successfully!",
+            timer: 1000,
+            width: "400px",
+            showConfirmButton: false,
+          });
+
+          // Refresh the teacher list after successful update
+          const response = await axios.get(GET_STUDENT_LIST_API);
+          setData(response.data.data);
+          seteditStudentId(null);
+          setEditUserType("");
+          setEditUserStatus("");
+
+        } catch (error) {
+          console.error("Error updating teacher:", error);
+        }
+      };
     const handleItemsPerPageChange = (e) => {
         setItemsPerPage(parseInt(e.target.value, 10));
         setCurrentPage(1);
@@ -67,8 +115,9 @@ const StudentPage = () => {
     });
 
     const handleViewClick = (studentID) => {
+        console.log("Selected Student ID:", studentID)
         localStorage.setItem("selectedStudent", studentID);
-        
+
     };
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -119,7 +168,7 @@ const StudentPage = () => {
                             <tr className="bg-red-50 text-left dark:bg-meta-4">
                                 <th className="min-w-10 py-4 px-2 font-medium text-black dark:text-white ">
                                     <span className="flex items-center gap-1">
-                                       No.
+                                        No.
                                     </span>
                                 </th>
                                 <th className="min-w-[20px] py-4 px-2 font-medium text-black dark:text-white ">
@@ -133,7 +182,11 @@ const StudentPage = () => {
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">
                                     Mobile Number
                                 </th>
-
+                                <th className="min-w-10 py-4 px-4 font-medium text-black dark:text-white ">
+                                    <span className="flex items-center gap-1">
+                                        Status
+                                    </span>
+                                </th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">
                                     Actions
                                 </th>
@@ -144,46 +197,57 @@ const StudentPage = () => {
                                 <tr key={key}>
                                     <td className="border-b border-[#eee] py-5 px-5  dark:border-strokedark ">
                                         <h5 className="font-medium text-black dark:text-white">
-                                            {key+1}
+                                            {key + 1}
                                         </h5>
 
                                     </td>
                                     <td className="border-b border-[#eee] py-5 px-3 dark:border-strokedark">
                                         <h5 className="font-medium text-black dark:text-white">
-                                            {student.full_name}
+                                            {student.userdata.full_name}
                                         </h5>
 
                                     </td>
 
                                     <td className="border-b border-[#eee] py-5 px-5 dark:border-strokedark">
                                         <p className="text-black dark:text-white">
-                                            {shift_name[student.shiftdatum_id]}
+                                            {console.log("DATA "+student.userdata.shift_name)}
+                                            {shift_name[student.userdata.shiftdatum_id]}
                                         </p>
                                     </td>
 
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <p className="text-black dark:text-white">
-                                            {student.mobile_number}
+                                            {student.userdata.mobile_number}
                                         </p>
                                     </td>
-
+                                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                                        <p
+                                            className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${student.login.is_active == 1
+                                                ? 'bg-success text-success'
+                                                : 'bg-danger text-danger'
+                                                }`}
+                                        >
+                                            {student.login.is_active == 1 ? 'Active' : 'Inactive'}
+                                        </p>
+                                    </td>
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <div className="flex items-center space-x-3.5">
+                                            <button onClick={() => editTeacher(student.login.id)} className="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
+                                                Edit
+                                            </button>
                                             <Link
                                                 to={{
                                                     pathname: "/view-student",
                                                     state: { student: student }
                                                 }}
-                                                onClick={() => handleViewClick(student.id)} // Update this line
+                                                onClick={() => handleViewClick(student.userdata.id)} // Update this line
+                                                className="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50"
                                             >
-                                                <button
-                                                    class="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50"
-                                                >
-                                                    VIEW
-                                                </button>
+                                                VIEW
                                             </Link>
                                         </div>
                                     </td>
+
                                 </tr>
                             ))}
                         </tbody>
@@ -222,7 +286,42 @@ const StudentPage = () => {
                         Next
                     </button>
                 </div>
-
+                {editStudentId !== null && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+                        <div className="bg-white p-5 rounded-md shadow-lg w-80 h-30">
+                            <div className="mb-4">
+                                <label htmlFor="userStatus">Student Status : </label>
+                                <select
+                                    id="userStatus"
+                                    value={editUserStatus}
+                                    onChange={(e) => setEditUserStatus(e.target.value)}
+                                    className="border rounded-md px-2 py-1"
+                                >
+                                    <option value={true}>Active</option>
+                                    <option value={false}>Inactive</option>
+                                </select>
+                            </div>
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={() => {
+                                        seteditStudentId(null);
+                                        setEditUserType("");
+                                        setEditUserStatus("");
+                                    }}
+                                    className="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={saveChanges}
+                                    className="mx-0 ml-5 px-3 py-1 focus:outline-none bg-blue-600 text-white hover:bg-opacity-50"
+                                >
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
         </DefaultLayout>

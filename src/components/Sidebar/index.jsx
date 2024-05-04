@@ -141,7 +141,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         <div className='flex w-[22px] justify-center'>
                           <IoMdPaper  size={23} />
                         </div>
-                        Manage Cource
+                        Manage Course
                         <FaChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 ${open && 'rotate-180'}`} />
                       </NavLink>
                       {/* <!-- Dropdown Menu Start --> */}
@@ -159,7 +159,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                               }
                             >
                               <IoMdSettings size={20} />
-                              Manage Cources
+                              Manage Courses
                             </NavLink>
                           </li>
                           <li>

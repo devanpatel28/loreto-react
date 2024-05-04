@@ -54,6 +54,10 @@ const ChatPage = () => {
   };
   
   const sendMessage = async () => {
+    if (message.trim() === "") {
+      // If the message is empty, do nothing
+      return;
+    }
     try {
       await addDoc(collection(firestore, "messages"), {
         message: message,
@@ -90,7 +94,7 @@ const ChatPage = () => {
                   </div>
                 ) : null}
                 <div className="flex flex-col items-end">
-                  <div className="bg-blue-500 text-white py-2 px-4 rounded-lg max-w-md" onDoubleClick={() => deleteMessage(chat.id)}>
+                  <div className="bg-blue-500 text-white py-2 px-4 rounded-2xl rounded-br-none max-w-md" onDoubleClick={() => deleteMessage(chat.id)}>
                     {chat.message}
                   </div>
                   <p className="text-gray-400 text-xs mt-1">

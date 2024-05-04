@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Breadcrumb from "../../components/BreadCrumb/BreadCrumb";
 import DefaultLayout from "../../layout/DefaultLayout";
-import { IoAdd } from "react-icons/io5";
+import { IoAdd, IoArrowBack, IoArrowForward } from "react-icons/io5";
 import axios from "axios";
-import { ADD_COURSEENROLL_API, FIND_SHIFT_API, GET_COURSE_API, GET_COURSE_LEVEL_API, GET_STUDENT_API, GET_STUDENT_DATA_API } from "../../helper/api";
+import { ADD_COURSEENROLL_API, FIND_SHIFT_API, GET_COURSE_API, GET_COURSE_LEVEL_API, GET_STUDENT_API, GET_STUDENT_ATTENDANCE_API, GET_STUDENT_DATA_API } from "../../helper/api";
 import { underDev } from "../../helper/alert";
 import CourseCard from "../../components/CourseCard";
 import Swal from "sweetalert2";
+import { format } from "date-fns";
 
 const ViewStudent = () => {
     const [Data, setData] = useState([]);
@@ -20,6 +21,8 @@ const ViewStudent = () => {
         course_level_id: "",
         last_month: "",
     });
+    const [attendanceData, setAttendanceData] = useState([]);
+    const [currentMonth, setCurrentMonth] = useState(new Date());
     useEffect(() => {
         async function fetchCourses() {
             try {
@@ -41,15 +44,28 @@ const ViewStudent = () => {
                     id: storedStudent
                 });
                 setData(response.data.data);
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        const fetchAttandance = async () => {
+            try {
+                const storedStudent = localStorage.getItem("selectedStudent");
+                console.log("storedStudent : " + storedStudent)
+                const response = await axios.post(GET_STUDENT_ATTENDANCE_API, {
+                    id: storedStudent
+                });
+                setAttendanceData(response.data.data);
                 console.log("response.data.data : " + response.data.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
-
+        fetchAttandance();
         fetchData();
     }, []);
-    
+
     const handleCourseChange = async (e) => {
         const course_id = e.target.value;
         console.log("Selected course ID:", course_id);
@@ -123,7 +139,7 @@ const ViewStudent = () => {
                 timer: 1000,
                 showConfirmButton: false,
             });
-        } 
+        }
     };
 
     const viewPopUp = () => {
@@ -138,7 +154,68 @@ const ViewStudent = () => {
     else {
         address = `${Data.userdata?.block_number} ${Data.userdata?.street_name} ${Data.userdata?.city} ${Data.userdata?.state} ${Data.userdata?.pincode}`
     }
-    
+
+    const renderAttendanceCalendar = () => {
+        const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
+        const calendarDates = [];
+        let firstDayOfWeek = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay(); // Day of the week for the first day of the month (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+        const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']; // Array of day names
+
+        // Push empty cells for the days before the first day of the month to align the calendar
+        for (let i = 0; i < firstDayOfWeek; i++) {
+            calendarDates.push(
+                <div key={`empty-${i}`} className="text-center py-2 border border-gray-300 w-full"></div>
+            );
+        }
+
+        for (let i = 1; i <= daysInMonth; i++) {
+            const currentDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i);
+            const attendance = attendanceData.find(item => new Date(item.date).getDate() === currentDate.getDate() && new Date(item.date).getMonth() === currentDate.getMonth() && new Date(item.date).getFullYear() === currentDate.getFullYear());
+            const color = attendance ? (
+                attendance.status === "Present" ? "bg-green-500 text-white border-none font-medium p-2"
+                    : attendance.status === "Absent" ? "bg-red-500 text-white border-none font-medium p-2"
+                        : "bg-yellow-500 text-white border-none font-medium p-2  ")
+                : "bg-transparent";
+            calendarDates.push(
+                <div key={currentDate.toISOString()} className={`text-center py-2 border border-gray-300 w-full ${color}`}>
+                    {currentDate.getDate()}
+                </div>
+            );
+
+            // If the current day is Saturday (6), start a new row
+            if (currentDate.getDay() === 6) {
+                // Push empty cells to fill the row if it's not already full
+                while (calendarDates.length % 7 !== 0) {
+                    calendarDates.push(
+                        <div key={`empty-${calendarDates.length}`} className="text-center py-2 border border-gray-300 w-full"></div>
+                    );
+                }
+            }
+        }
+
+        // If the last day of the month is not Saturday, add empty cells to complete the last row
+        while (calendarDates.length % 7 !== 0) {
+            calendarDates.push(
+                <div key={`empty-${calendarDates.length}`} className="text-center py-2 border border-gray-300 w-full"></div>
+            );
+        }
+
+        return (
+            <div className="grid grid-cols-7 w-full">
+                {dayNames.map((day, index) => (
+                    <div key={index} className={`text-center ${day === 'SUN' || day === 'SAT' ? "text-red-500" : "text-slate-500"} py-2 border border-gray-300 w-full bg-slate-300 font-bold p-2`}>{day}</div>
+                ))}
+                {calendarDates}
+            </div>
+        );
+    };
+    const handlePreviousMonth = () => {
+        setCurrentMonth(prevMonth => new Date(prevMonth.getFullYear(), prevMonth.getMonth() - 1));
+    };
+
+    const handleNextMonth = () => {
+        setCurrentMonth(prevMonth => new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1));
+    };
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Student Info" />
@@ -190,7 +267,7 @@ const ViewStudent = () => {
                             </div>
                             <div className="w-full sm:w-1/3">
                                 <label className="mb-3 block  font-medium text-black dark:text-white"
-                                    htmlFor="email"> Shift</label>
+                                    htmlFor="email">Shift</label>
 
                                 <div className="w-full rounded border border-stroke bg-slate-100 py-3 px-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
                                     name="shift"
@@ -223,9 +300,27 @@ const ViewStudent = () => {
                                     <CourseCard key={index} course={course} />
                                 ))}
                         </div>
+                        <div className="mb-5.5 w-full">
+                            <h2 className="text-lg text-black font-medium mb-3">Attendance</h2>
+                            <center>
+                            <div className=" items-center justify-between mb-3">
+                                <button onClick={handlePreviousMonth} className="focus:outline-none mr-15">
+                                    <IoArrowBack size={20} />
+                                </button>
+                                <span>{format(currentMonth, 'MMMM yyyy')}</span>
+                                <button onClick={handleNextMonth} className="focus:outline-none ml-15">
+                                    <IoArrowForward size={20}/>
+                                </button>
+                            </div>
+                            </center>
+                            <div style={{ display: "flex", flexWrap: "wrap", border: "1px solid #ccc", borderRadius: "5px", marginTop: "10px" }}>
+                                {renderAttendanceCalendar()}
+                            </div>
+                        </div>
+
                     </form>
                 </div>
-                {viewPopup &&(
+                {viewPopup && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
                         <div className="bg-white p-5 rounded-md shadow-lg w-80 h-55">
                             <h2 className="text-lg font-bold mb-5">Add Course</h2>
@@ -286,7 +381,7 @@ const ViewStudent = () => {
                             <div className="flex justify-end">
                                 <button
                                     type="button"
-                                    onClick={() => 
+                                    onClick={() =>
                                         setViewpopup(null)
                                     }
                                     className="mx-0 px-3 py-1 focus:outline-none bg-graydark text-white hover:bg-opacity-50">
