@@ -1,7 +1,7 @@
-const HOST = "http://localhost:";
-// const HOST = "https://smart-classmate-server.onrender.com";
-const PORT1 = "3000";
-const PORT2 = "3000";
+// const HOST = "http://localhost:";
+const HOST = "https://smart-classmate-server.onrender.com";
+const PORT1 = "";
+const PORT2 = "";
 
 export const CHECK_LOGIN_API = HOST+PORT1+"/api/login/check";
 export const ADD_LOGIN_API = HOST+PORT1+"/api/login/";
@@ -38,7 +38,7 @@ export const GET_EVENT_API = HOST+PORT1+"/api/events"
 export const GET_HOLIDAY_API = HOST+PORT2+"/api/holidays"
 export const CHANGE_HOLIDAY_API = HOST+PORT2+`/api/holidays/${PORT2=="8080"?"status":"update"}`
 export const GET_UPCOMING_HOLIDAY_API = HOST+PORT1+"/api/holidays/upcoming"
-export const GET_UPCOMING_EVENTS_API = HOST+PORT1+"/api/events/upcoming"
+export const GET_UPCOMING_EVENTS_API = HOST+PORT1+"/api/events/upcomingOne"
 export const ATTENDANCE_API = HOST+PORT1+"/api/attendance"
 export const TODAY_ATTENDANCE_API = HOST+PORT1+"/api/attendance/getToday"
 export const UPDATE_ATTENDANCE_API = HOST+PORT1+"/api/attendance/update"

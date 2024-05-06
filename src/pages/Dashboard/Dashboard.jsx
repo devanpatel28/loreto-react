@@ -8,7 +8,7 @@ import axios from 'axios';
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [holiday, setHoliday] = useState([]);
-  const [event, setEvent] = useState({});
+  const [event, setEvent] = useState([]);
 
 
 
@@ -32,7 +32,7 @@ const Dashboard = () => {
     const fetchEvent = async () => {
       try {
         const response = await axios.get(GET_UPCOMING_EVENTS_API);
-        setEvent(response.data.data[0]);
+        setEvent(response.data.data);
         console.log(response.data.data)
       } catch (error) {
         console.error("Error fetching data:", error);
